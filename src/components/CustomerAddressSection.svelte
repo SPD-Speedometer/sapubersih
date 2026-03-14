@@ -1,5 +1,5 @@
 <script>
-  import MapPickerModal from './MapPickerModal.svelte';
+  import MapPicker from './MapPicker.svelte';
 
   export let busy = false;
   export let addresses = [];
@@ -12,42 +12,26 @@
   export let onSubmit = () => {};
   export let onReset = () => {};
 
-  let mapsStepStarted = false;
-  let mapPickerOpen = false;
-  $: addressFieldsVisible =
-    Boolean(editingAddressId) ||
-    mapsStepStarted ||
-    Boolean(addressForm.address_text || addressForm.lat || addressForm.lng || addressForm.maps_url);
-
   function handleAddAddress() {
-    mapsStepStarted = false;
     onAdd();
   }
 
   function handleEditAddress(address) {
-    mapsStepStarted = true;
     onEdit(address);
   }
 
   function handleResetAddress() {
-    mapsStepStarted = false;
     onReset();
   }
 
-  function handleOpenMaps() {
-    mapsStepStarted = true;
-    mapPickerOpen = true;
-  }
-
-  function handleApplyMapSelection(selection) {
+  function handleMapChange(event) {
+    const { lat, lng, maps_url } = event.detail;
     addressForm = {
       ...addressForm,
-      lat: selection.lat,
-      lng: selection.lng,
-      maps_url: selection.maps_url
+      lat,
+      lng,
+      maps_url
     };
-    mapsStepStarted = true;
-    mapPickerOpen = false;
   }
 </script>
 
@@ -99,34 +83,27 @@
         <span>No. penerima</span>
         <input data-testid="address-receiver-phone" bind:value={addressForm.receiver_phone} placeholder="0812xxxx" />
       </label>
-      <div class="maps-helper">
-        <div>
-          <strong>Pilih lokasi di peta</strong>
-          <p>Setelah memilih titik di peta, field alamat lengkap sampai link maps akan muncul otomatis di bawah.</p>
-        </div>
-        <button class="btn btn-ghost maps-picker-button" type="button" on:click={handleOpenMaps}>Buka Peta</button>
+
+      <div class="field">
+        <span class="field-label">Pilih lokasi di peta</span>
+        <p class="field-hint muted">Klik titik di peta atau gunakan tombol lokasi untuk mengisi koordinat otomatis.</p>
+        <MapPicker
+          lat={addressForm.lat ? Number(addressForm.lat) : 0}
+          lng={addressForm.lng ? Number(addressForm.lng) : 0}
+          height="280px"
+          on:change={handleMapChange}
+        />
       </div>
 
-      {#if addressFieldsVisible}
-        <label class="field">
-          <span>Alamat lengkap</span>
-          <textarea data-testid="address-text" bind:value={addressForm.address_text} rows="4" placeholder="Alamat penjemputan"></textarea>
-        </label>
-        <div class="field-row">
-          <label class="field">
-            <span>Latitude</span>
-            <input data-testid="address-lat" bind:value={addressForm.lat} placeholder="-6.2" />
-          </label>
-          <label class="field">
-            <span>Longitude</span>
-            <input data-testid="address-lng" bind:value={addressForm.lng} placeholder="106.8" />
-          </label>
-        </div>
-        <label class="field">
-          <span>Link maps</span>
-          <input data-testid="address-maps-url" bind:value={addressForm.maps_url} placeholder="https://maps.google.com/..." />
-        </label>
-      {/if}
+      <label class="field">
+        <span>Alamat lengkap</span>
+        <textarea data-testid="address-text" bind:value={addressForm.address_text} rows="4" placeholder="Alamat penjemputan"></textarea>
+      </label>
+      <label class="field">
+        <span>Link maps</span>
+        <input data-testid="address-maps-url" bind:value={addressForm.maps_url} placeholder="https://maps.google.com/..." />
+      </label>
+
       <label class="checkbox">
         <input data-testid="address-is-default" bind:checked={addressForm.is_default} type="checkbox" />
         <span>Jadikan alamat default</span>
@@ -139,12 +116,15 @@
   </article>
 </section>
 
-{#if mapPickerOpen}
-  <MapPickerModal
-    initialLat={addressForm.lat}
-    initialLng={addressForm.lng}
-    initialAddressText={addressForm.address_text}
-    onApply={handleApplyMapSelection}
-    onClose={() => (mapPickerOpen = false)}
-  />
-{/if}
+<style>
+  .field-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .field-hint {
+    font-size: 0.8rem;
+    margin: 0 0 0.5rem;
+  }
+</style>
