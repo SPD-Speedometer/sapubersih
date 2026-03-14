@@ -1,0 +1,7 @@
+@import './styles/base.css';
+@import './styles/navbar.css';
+@import './styles/public.css';
+@import './styles/auth.css';
+@import './styles/customer.css';
+@import './styles/modal.css';
+@import './styles/responsive.css';

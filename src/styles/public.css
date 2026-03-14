@@ -1,0 +1,186 @@
+.alert {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 22px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.alert.success {
+  background: rgba(220, 252, 231, 0.92);
+  color: #166534;
+  border-color: rgba(34, 197, 94, 0.18);
+}
+
+.alert.error {
+  background: rgba(252, 232, 228, 0.92);
+  color: #7f3028;
+  border-color: rgba(182, 72, 61, 0.22);
+}
+
+.alert.warning {
+  background: rgba(240, 253, 244, 0.96);
+  color: var(--color-brand-800);
+  border-color: rgba(34, 197, 94, 0.18);
+}
+
+.hero-grid,
+.section-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-grid {
+  margin-top: 1rem;
+  grid-template-columns: minmax(0, 9fr) minmax(280px, 3fr);
+  margin-bottom: 1rem;
+}
+
+.section-metrics {
+  margin-bottom: 1rem;
+}
+
+.hero-main {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.97), rgba(237, 247, 241, 0.94)),
+    linear-gradient(120deg, rgba(20, 84, 51, 0.08), transparent);
+  box-shadow:
+    0 34px 68px rgba(17, 24, 39, 0.16),
+    0 18px 40px rgba(20, 84, 51, 0.14);
+}
+
+.hero-main h2 {
+  margin: 0.6rem 0;
+  font-size: clamp(1.45rem, 2.6vw, 2.6rem);
+  line-height: 1.08;
+}
+
+.hero-main p {
+  color: var(--muted);
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.hero-visual {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  align-content: space-between;
+  min-height: 100%;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(229, 242, 234, 0.96)),
+    linear-gradient(125deg, rgba(16, 61, 38, 0.18), rgba(31, 127, 73, 0.06));
+  border-color: rgba(20, 84, 51, 0.18);
+}
+
+.trash-illustration {
+  width: 100%;
+  max-width: 250px;
+  justify-self: center;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 22px 32px rgba(15, 115, 55, 0.14));
+}
+
+.hero-visual-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.hero-visual-copy strong {
+  font-size: 1.05rem;
+  color: var(--color-brand-900);
+}
+
+.hero-visual-copy span {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.metric-list,
+.chip-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.metric-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metric-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.97), rgba(236, 246, 240, 0.92)),
+    linear-gradient(120deg, rgba(20, 84, 51, 0.08), transparent);
+  box-shadow:
+    0 26px 52px rgba(17, 24, 39, 0.14),
+    0 12px 28px rgba(20, 84, 51, 0.12);
+}
+
+.metric-illustration {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(221, 243, 228, 0.96), rgba(88, 185, 122, 0.28));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 6px 14px rgba(20, 84, 51, 0.1);
+}
+
+.metric-illustration svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  stroke: var(--color-brand-800);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.metric-copy {
+  min-width: 0;
+  text-align: left;
+}
+
+.metric-card strong {
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.06rem;
+}
+
+.metric-card span {
+  color: var(--muted);
+}
+
+.chip-list {
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+}
+
+.chip {
+  padding: 0.78rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(221, 243, 228, 0.92);
+  color: var(--brand-strong);
+  font-weight: 700;
+  text-align: center;
+}
+
+.flow-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--muted);
+}

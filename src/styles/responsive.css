@@ -1,0 +1,183 @@
+@media (max-width: 900px) {
+  .hero-grid,
+  .auth-shell,
+  .customer-shell,
+  .history-layout,
+  .address-layout,
+  .summary-grid,
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .site-header,
+  .cta-panel,
+  .address-card,
+  .section-head,
+  .maps-helper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 0.56rem 1.65rem;
+  }
+
+  .header-actions {
+    width: auto;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .brand-lockup {
+    align-items: center;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    width: min(100% - 20px, 1180px);
+    padding-top: 68px;
+  }
+
+  .site-header,
+  .hero-panel,
+  .panel,
+  .modal-card {
+    border-radius: 24px;
+  }
+
+  .tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-buttons,
+  .stack-actions,
+  .nav-links {
+    width: 100%;
+  }
+
+  .hero-buttons {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+
+  .hero-visual {
+    min-height: auto;
+  }
+
+  .trash-illustration {
+    max-width: 180px;
+  }
+
+  .brand-logo {
+    width: auto;
+    height: 38px;
+  }
+
+  .metric-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .metric-list .metric-card:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(100%, 11rem);
+  }
+
+  .metric-card {
+    grid-template-columns: auto 1fr;
+    padding: 0.8rem 0.55rem;
+    border-radius: 18px;
+    text-align: left;
+    gap: 0.42rem;
+  }
+
+  .metric-illustration {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9px;
+  }
+
+  .metric-illustration svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .metric-card strong {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  .metric-card span {
+    font-size: 0.68rem;
+    line-height: 1.1;
+  }
+
+  .navbar {
+    padding: 0.52rem 1.3rem;
+  }
+
+  .btn,
+  .stack-actions button,
+  .nav-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-buttons .btn {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0.72rem 0.7rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .header-actions {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .header-actions button {
+    width: auto;
+    min-width: 84px;
+    padding: 0.34rem 0.62rem;
+    font-size: 0.84rem;
+    white-space: nowrap;
+  }
+
+  .history-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .map-picker-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .map-picker-actions {
+    width: 100%;
+  }
+
+  .map-picker-actions .btn {
+    width: 100%;
+  }
+
+  .map-picker-coordinates {
+    text-align: left;
+  }
+}

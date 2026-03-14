@@ -1,0 +1,188 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  padding: 20px;
+  background: rgba(20, 26, 22, 0.46);
+  display: grid;
+  place-items: center;
+  z-index: 30;
+}
+
+.modal-shell {
+  width: min(720px, 100%);
+}
+
+.modal-card {
+  width: min(720px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 1.35rem;
+  background: var(--surface-strong);
+}
+
+.modal-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.popup-card {
+  width: min(460px, calc(100% - 20px));
+  padding: 1.35rem;
+  border-radius: 28px;
+  background: var(--surface-strong);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow);
+}
+
+.map-picker-card {
+  width: min(760px, calc(100% - 20px));
+  display: grid;
+  gap: 1rem;
+}
+
+.popup-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.popup-card h3 {
+  margin: 0.7rem 0 0.45rem;
+}
+
+.popup-card p {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.map-picker-copy {
+  margin: -0.2rem 0 0;
+}
+
+.map-picker-note {
+  margin: -0.35rem 0 0;
+  color: var(--color-brand-800);
+  font-size: 0.92rem;
+}
+
+.map-picker-help {
+  margin: -0.4rem 0 0;
+  color: var(--warning);
+  font-size: 0.9rem;
+}
+
+.map-picker-error {
+  margin: -0.45rem 0 0;
+  color: #b45309;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.popup-dismiss {
+  color: var(--ink);
+  border-color: rgba(47, 125, 74, 0.16);
+  background: rgba(47, 125, 74, 0.08);
+}
+
+.popup-close {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  background: rgba(20, 84, 51, 0.08);
+  color: var(--color-brand-800);
+}
+
+.popup-close svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.verify-otp-field {
+  margin-bottom: 0.7rem;
+}
+
+.map-picker-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.map-picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.map-picker-coordinates {
+  display: grid;
+  gap: 0.1rem;
+  text-align: right;
+}
+
+.map-picker-coordinates strong {
+  font-size: 1rem;
+  color: var(--color-brand-900);
+}
+
+.map-picker-coordinates span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.map-picker-frame {
+  position: relative;
+  min-height: 360px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.map-picker-canvas {
+  width: 100%;
+  min-height: 360px;
+}
+
+.map-picker-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--muted);
+  z-index: 1;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(220, 252, 231, 0.9);
+  color: var(--brand-strong);
+  font-size: 1.35rem;
+}
+
+.estimate-card {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.estimate-card strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.25rem;
+}
+
+.divider {
+  height: 1px;
+  margin: 0.4rem 0;
+  background: var(--line);
+}
+
+.empty-state {
+  display: grid;
+  gap: 0.9rem;
+  text-align: center;
+}

@@ -1,0 +1,200 @@
+.customer-shell,
+.summary-grid,
+.history-layout,
+.address-layout,
+.history-stack,
+.timeline-list,
+.item-list,
+.address-list,
+.detail-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.customer-shell {
+  margin-top: 1rem;
+  grid-template-columns: minmax(250px, 290px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.sidebar {
+  display: grid;
+  gap: 1rem;
+  position: sticky;
+  top: 24px;
+}
+
+.profile-card h2 {
+  margin: 0.75rem 0 0.3rem;
+}
+
+.profile-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.nav-panel {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.summary-card,
+.estimate-card,
+.history-card,
+.timeline-card,
+.item-card,
+.address-card {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.summary-card {
+  padding: 1rem 1.1rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 244, 0.88)),
+    linear-gradient(120deg, rgba(34, 197, 94, 0.05), transparent);
+}
+
+.summary-card span {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--muted);
+}
+
+.summary-card strong {
+  font-size: 1.4rem;
+}
+
+.summary-card.accent {
+  background:
+    linear-gradient(135deg, rgba(220, 252, 231, 0.98), rgba(255, 255, 255, 0.86)),
+    linear-gradient(120deg, rgba(34, 197, 94, 0.08), transparent);
+}
+
+.cta-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cta-panel h3,
+.panel h3,
+.detail-stack h4 {
+  margin: 0 0 0.5rem;
+}
+
+.history-layout {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.history-card {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+
+.history-card strong,
+.detail-row strong {
+  display: block;
+}
+
+.history-card span,
+.detail-row span,
+.timeline-card span,
+.item-card span {
+  color: var(--muted);
+}
+
+.detail-row {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px dashed var(--line);
+}
+
+.item-card,
+.timeline-card,
+.estimate-card,
+.address-card {
+  padding: 0.95rem 1rem;
+}
+
+.address-layout {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.95fr);
+}
+
+.address-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.address-card p {
+  margin: 0.35rem 0;
+}
+
+.address-actions,
+.stack-actions {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.maps-helper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.2rem;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.97), rgba(236, 246, 240, 0.92)),
+    linear-gradient(120deg, rgba(20, 84, 51, 0.06), transparent);
+}
+
+.maps-helper strong {
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.maps-helper p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.maps-picker-button {
+  white-space: nowrap;
+}
+
+.address-actions {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.stack-actions {
+  flex-wrap: wrap;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
