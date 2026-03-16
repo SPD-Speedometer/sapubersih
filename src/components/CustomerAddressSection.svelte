@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import MapPicker from './MapPicker.svelte';
   import { Pencil, Trash2, RefreshCw } from 'lucide-svelte';
 
@@ -17,15 +18,19 @@
   export let onReset = () => {};
 
   let errors = {};
+  let isMobile = false;
+  let formModalOpen = false;
 
   function handleAddAddress() {
     onAdd();
     errors = {};
+    if (isMobile) formModalOpen = true;
   }
 
   function handleEditAddress(address) {
     onEdit(address);
     errors = {};
+    if (isMobile) formModalOpen = true;
   }
 
   function handleDeleteAddress(addressId) {
@@ -37,6 +42,17 @@
   function handleResetAddress() {
     onReset();
     errors = {};
+  }
+
+  function handleCloseModal() {
+    formModalOpen = false;
+  }
+
+  function handleOverlayKeydown(event) {
+    if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleCloseModal();
+    }
   }
 
   function handleMapChange(event) {
@@ -95,10 +111,36 @@
     };
 
     onSubmit();
+    if (isMobile) formModalOpen = false;
   }
+
+  function updateIsMobile() {
+    if (typeof window === 'undefined') return;
+    isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobile) formModalOpen = false;
+  }
+
+  onMount(() => {
+    updateIsMobile();
+    const handler = () => updateIsMobile();
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  });
 </script>
 
 <section class="section-grid address-layout">
+  {#if isMobile}
+    <div
+      class="modal-overlay"
+      class:visible={formModalOpen}
+      role="button"
+      tabindex="0"
+      on:click|self={handleCloseModal}
+      on:keydown|self={handleOverlayKeydown}
+      aria-label="Tutup form alamat"
+    ></div>
+  {/if}
+
   <article class="panel">
     <div class="section-head">
       <h3>Alamat penjemputan</h3>
@@ -164,8 +206,18 @@
     {/if}
   </article>
 
-  <article class="panel">
-    <h3>{editingAddressId ? 'Edit alamat' : 'Form alamat baru'}</h3>
+  <article
+    class="panel address-form-panel"
+    class:is-mobile={isMobile}
+    class:show-modal={formModalOpen}
+  >
+    {#if isMobile}
+      <div class="modal-header">
+        <h3>{editingAddressId ? 'Edit alamat' : 'Form alamat baru'}</h3>
+        <button type="button" class="close-btn" on:click={handleCloseModal} aria-label="Tutup form alamat">×</button>
+      </div>
+    {/if}
+    <h3 class:sr-only={isMobile}>{editingAddressId ? 'Edit alamat' : 'Form alamat baru'}</h3>
     <form data-testid="address-form" on:submit={handleSubmit}>
       <label class="field">
         <span>Label alamat</span>
@@ -241,6 +293,62 @@
     align-items: center;
     gap: 0.35rem;
     white-space: nowrap;
+  }
+
+  .modal-overlay {
+    display: none;
+  }
+
+  .modal-overlay.visible {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 25;
+  }
+
+  .address-form-panel.is-mobile {
+    display: none;
+  }
+
+  .address-form-panel.is-mobile.show-modal {
+    display: block;
+    position: fixed;
+    inset: 6% 5%;
+    z-index: 30;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .close-btn {
+    border: none;
+    background: #f3f4f6;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .address-loading-inline {
