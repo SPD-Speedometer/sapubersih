@@ -115,6 +115,12 @@
 
     {#if authMode === 'register'}
       <form data-testid="form-register" on:submit|preventDefault={onRegisterSubmit}>
+        {#if inlineAlert}
+          <div class="alert error inline-alert">
+            <span>{inlineAlert}</span>
+            <button class="alert-close" type="button" aria-label="Tutup peringatan" on:click={() => (inlineAlert = '')}>×</button>
+          </div>
+        {/if}
         <p class="field-hint welcome">
           Daftarkan diri Anda
         </p>
