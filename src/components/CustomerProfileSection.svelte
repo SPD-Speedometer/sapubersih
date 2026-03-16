@@ -3,6 +3,7 @@
   export let profileForm = { name: '', email: '', phone: '' };
   export let onChange = () => {};
   export let onSubmit = () => {};
+  export let onLogout = () => {};
 
   const updateField = (key, value) => {
     onChange({ ...profileForm, [key]: value });
@@ -48,6 +49,13 @@
   </div>
 
   <div class="profile-actions">
-    <button class="btn" type="button" disabled={busy} on:click={onSubmit}>Simpan perubahan</button>
+    <div class="profile-actions-left">
+      <button class="btn" type="button" disabled={busy} on:click={onSubmit}>Simpan perubahan</button>
+    </div>
+    <div class="profile-actions-right">
+      <button class="profile-logout" type="button" on:click={onLogout} disabled={busy}>
+        Logout
+      </button>
+    </div>
   </div>
 </section>

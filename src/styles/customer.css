@@ -107,11 +107,12 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-}
-
-.sidebar-logout-row {
-  display: flex;
-  justify-content: flex-start;
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
 }
 
 .sidebar-account-avatar {
@@ -134,23 +135,15 @@
   font-size: 0.86rem;
 }
 
-.sidebar-logout {
-  display: inline-flex;
-  align-items: center;
+.sidebar-actions {
+  display: grid;
   gap: 0.35rem;
-  padding: 0.4rem 0.75rem;
-  border-radius: 10px;
-  border: 1px solid rgba(220, 38, 38, 0.18);
-  background: linear-gradient(135deg, rgba(248, 113, 113, 0.1), rgba(248, 113, 113, 0.02));
-  color: #b91c1c;
-  cursor: pointer;
-  font-weight: 700;
-  box-shadow: none;
 }
 
 .summary-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-bottom: 1rem;
+  margin-top: 0.5rem;
 }
 
 .summary-card,
@@ -169,14 +162,43 @@
   gap: 0.8rem;
 }
 
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
 .profile-header h2 {
   margin: 0.3rem 0 0.2rem;
 }
 
+.profile-logout {
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid #7f1d1d;
+  background: linear-gradient(135deg, #991b1b, #701a1a);
+  color: #fef2f2;
+  cursor: pointer;
+  font-weight: 700;
+}
+
 .profile-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 0.6rem;
+}
+
+.profile-actions-left {
   display: flex;
   justify-content: flex-start;
-  margin-top: 0.5rem;
+}
+
+.profile-actions-right {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .summary-card {

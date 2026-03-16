@@ -605,8 +605,6 @@
     />
   {/if}
 
-  <AlertMessage {alert} onClose={clearAlert} />
-
   {#if routeReady && currentView === 'public'}
     <PublicHeroSection onPickup={handlePublicPickupClick} onRegister={() => goAuth('register')} />
     <ServiceSummarySection {serviceAreas} {wasteCategories} {depots} />
@@ -652,6 +650,8 @@
       />
 
       <div class="customer-content">
+        <AlertMessage {alert} onClose={clearAlert} />
+
         {#if customerSection === 'home'}
           <CustomerHomeSection
             {orders}
@@ -698,6 +698,7 @@
             {profileForm}
             onChange={(form) => (profileForm = form)}
             onSubmit={handleProfileSave}
+            onLogout={handleLogout}
           />
         {/if}
       </div>
