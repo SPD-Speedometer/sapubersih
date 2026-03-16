@@ -233,12 +233,14 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: nowrap;
   }
 
   .section-actions .btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    white-space: nowrap;
   }
 
   .address-loading-inline {
