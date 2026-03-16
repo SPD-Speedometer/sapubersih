@@ -1,5 +1,6 @@
 <script>
   import MapPicker from './MapPicker.svelte';
+  import { Pencil, Trash2 } from 'lucide-svelte';
 
   export let busy = false;
   export let addresses = [];
@@ -24,6 +25,12 @@
     errors = {};
   }
 
+  function handleDeleteAddress(addressId) {
+    const ok = confirm('Hapus alamat ini? Aksi tidak dapat dibatalkan.');
+    if (!ok) return;
+    onDelete(addressId);
+  }
+
   function handleResetAddress() {
     onReset();
     errors = {};
@@ -38,10 +45,12 @@
       maps_url
     };
 
-    addressForm = {
-      ...addressForm,
-      address_text: address_text || ''
-    };
+    if (address_text) {
+      addressForm = {
+        ...addressForm,
+        address_text
+      };
+    }
   }
 
   function toNumber(val) {
@@ -107,11 +116,23 @@
             <div class="address-actions">
               {#if address.is_default}
                 <span class="badge light">Default</span>
-              {:else}
-                <button class="link-button" on:click={() => onSetDefault(address.id)}>Jadikan default</button>
               {/if}
-              <button class="link-button" on:click={() => handleEditAddress(address)}>Edit</button>
-              <button class="link-button danger" on:click={() => onDelete(address.id)}>Hapus</button>
+              <button
+                class="address-icon-btn"
+                aria-label="Edit alamat"
+                title="Edit"
+                on:click={() => handleEditAddress(address)}
+              >
+                <Pencil size={18} strokeWidth={2.2} />
+              </button>
+              <button
+                class="address-icon-btn danger"
+                aria-label="Hapus alamat"
+                title="Hapus"
+                on:click={() => handleDeleteAddress(address.id)}
+              >
+                <Trash2 size={18} strokeWidth={2.2} />
+              </button>
             </div>
           </div>
         {/each}

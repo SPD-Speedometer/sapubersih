@@ -181,11 +181,12 @@
     try {
       await action();
     } catch (error) {
+      console.error('API error', error?.response || error);
       const resp = error?.response;
       const errorsArray = Array.isArray(resp?.errors)
-        ? resp.errors
+        ? resp.errors.map((e) => (typeof e === 'object' ? `${e.field}: ${e.message}` : e))
         : resp?.errors && typeof resp.errors === 'object'
-          ? Object.values(resp.errors).flat()
+          ? Object.entries(resp.errors).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
           : null;
       const apiMessage = resp?.message || (errorsArray ? errorsArray.join(', ') : null);
       setAlert('error', apiMessage || error.message || 'Terjadi kesalahan pada sistem.');
@@ -689,7 +690,7 @@
           <CustomerAddressSection
             {busy}
             {addresses}
-            {addressForm}
+            bind:addressForm={addressForm}
             {editingAddressId}
             onAdd={startAddAddress}
             onSetDefault={makeDefaultAddress}
