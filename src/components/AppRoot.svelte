@@ -181,7 +181,10 @@
     try {
       await action();
     } catch (error) {
-      setAlert('error', error.message || 'Terjadi kesalahan pada sistem.');
+      const apiMessage =
+        error?.response?.data?.message ||
+        (Array.isArray(error?.response?.data?.errors) ? error.response.data.errors.join(', ') : null);
+      setAlert('error', apiMessage || error.message || 'Terjadi kesalahan pada sistem.');
     } finally {
       busy = false;
     }
