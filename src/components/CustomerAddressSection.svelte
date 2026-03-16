@@ -104,7 +104,9 @@
       <h3>Alamat penjemputan</h3>
       <div class="section-actions">
         <button class="btn btn-ghost" type="button" on:click={onRefresh}>
-          <RefreshCw size={16} class:spin={loading} />
+          <span class:spin={loading}>
+            <RefreshCw size={16} />
+          </span>
           <span>Refresh</span>
         </button>
         <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>Tambah Alamat</button>
