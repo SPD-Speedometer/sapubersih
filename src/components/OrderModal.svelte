@@ -24,7 +24,6 @@
           <span class="badge">Tambah order</span>
           <h3>Form panggil kurir</h3>
         </div>
-        <button class="icon-button" data-testid="order-modal-close" on:click={onClose}>×</button>
       </div>
 
       {#if !hasAddresses}
@@ -138,7 +137,6 @@
             <span class="badge">Tambah order</span>
             <h3>Form panggil kurir</h3>
           </div>
-          <button class="icon-button" data-testid="order-modal-close" on:click={onClose}>×</button>
         </div>
 
         {#if !hasAddresses}
@@ -257,5 +255,8 @@
     box-shadow: none;
     max-width: 840px;
     margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
   }
 </style>
