@@ -181,9 +181,13 @@
     try {
       await action();
     } catch (error) {
-      const apiMessage =
-        error?.response?.data?.message ||
-        (Array.isArray(error?.response?.data?.errors) ? error.response.data.errors.join(', ') : null);
+      const resp = error?.response;
+      const errorsArray = Array.isArray(resp?.errors)
+        ? resp.errors
+        : resp?.errors && typeof resp.errors === 'object'
+          ? Object.values(resp.errors).flat()
+          : null;
+      const apiMessage = resp?.message || (errorsArray ? errorsArray.join(', ') : null);
       setAlert('error', apiMessage || error.message || 'Terjadi kesalahan pada sistem.');
     } finally {
       busy = false;
