@@ -11,6 +11,11 @@
   let showLoginPassword = false;
   let showRegisterPassword = false;
   let showRegisterPasswordConfirmation = false;
+  $: passwordMismatch =
+    authMode === 'register' &&
+    registerForm.password &&
+    registerForm.password_confirmation &&
+    registerForm.password !== registerForm.password_confirmation;
 
   import loginIllustration from '../assets/login-truck-person.svg';
 </script>
@@ -248,6 +253,9 @@
               {/if}
             </button>
           </div>
+          {#if passwordMismatch}
+            <p class="field-error">Konfirmasi password tidak sama.</p>
+          {/if}
         </label>
         <button class="btn auth-submit wide" data-testid="register-submit" disabled={busy}>Daftar</button>
       </form>
