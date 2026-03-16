@@ -699,6 +699,7 @@
             bind:addressForm={addressForm}
             {editingAddressId}
             onAdd={startAddAddress}
+            onRefresh={loadAddresses}
             onSetDefault={makeDefaultAddress}
             onEdit={startEditAddress}
             onDelete={removeAddress}

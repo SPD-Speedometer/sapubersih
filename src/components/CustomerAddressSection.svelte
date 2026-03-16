@@ -1,12 +1,13 @@
 <script>
   import MapPicker from './MapPicker.svelte';
-  import { Pencil, Trash2 } from 'lucide-svelte';
+  import { Pencil, Trash2, RefreshCw } from 'lucide-svelte';
 
   export let busy = false;
   export let addresses = [];
   export let addressForm = {};
   export let editingAddressId = null;
   export let onAdd = () => {};
+  export let onRefresh = () => {};
   export let onSetDefault = () => {};
   export let onEdit = () => {};
   export let onDelete = () => {};
@@ -99,7 +100,13 @@
   <article class="panel">
     <div class="section-head">
       <h3>Alamat penjemputan</h3>
-      <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>Tambah Alamat</button>
+      <div class="section-actions">
+        <button class="btn btn-ghost" type="button" on:click={onRefresh}>
+          <RefreshCw size={16} />
+          <span>Refresh</span>
+        </button>
+        <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>Tambah Alamat</button>
+      </div>
     </div>
 
     {#if addresses.length === 0}
@@ -203,5 +210,17 @@
   .field-hint {
     font-size: 0.8rem;
     margin: 0 0 0.5rem;
+  }
+
+  .section-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
   }
 </style>
