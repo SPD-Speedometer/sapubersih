@@ -103,6 +103,13 @@
 
   const ADDRESS_CACHE_KEY = 'sb.addressCache';
 
+  const initialCachedAddresses =
+    typeof window !== 'undefined' ? loadAddressCache() : null;
+  if (initialCachedAddresses && Array.isArray(initialCachedAddresses)) {
+    addresses = initialCachedAddresses;
+    addressesLoaded = true;
+  }
+
   function loadAddressCache() {
     if (typeof localStorage === 'undefined') return null;
     try {
