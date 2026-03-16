@@ -100,6 +100,7 @@
   let orderModalOpen = false;
   let editingAddressId = null;
   let verificationPopupDismissed = false;
+  let isMobileView = false;
 
   const ADDRESS_CACHE_KEY = 'sb.addressCache';
 
@@ -184,10 +185,12 @@
     const handlePopState = async () => {
       await applyRoute(window.location.pathname, { replace: true });
     };
+    const handleResize = () => updateIsMobileView();
 
     const initialize = async () => {
       routeReady = true; // tampilkan layout lebih cepat saat refresh/route awal
       try {
+        updateIsMobileView();
         await loadPublicData();
         if (isLoggedIn) {
           await bootstrapCustomer();
@@ -202,9 +205,11 @@
 
     initialize();
     window.addEventListener('popstate', handlePopState);
+    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('resize', handleResize);
     };
   });
 
@@ -214,6 +219,15 @@
 
   function clearAlert() {
     alert = { type: '', text: '' };
+  }
+
+  function updateIsMobileView() {
+    if (typeof window === 'undefined') return;
+    isMobileView = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileView && orderModalOpen) {
+      orderModalOpen = false;
+      customerSection = 'pickup';
+    }
   }
 
   async function withBusy(action) {
@@ -266,6 +280,10 @@
 
     if (currentView === 'customer') {
       if (orderModalOpen) {
+        return dashboardRoutes.pickup;
+      }
+
+      if (customerSection === 'pickup') {
         return dashboardRoutes.pickup;
       }
 
@@ -331,8 +349,13 @@
         customerSection = 'profile';
         orderModalOpen = false;
       } else if (path === dashboardRoutes.pickup) {
-        customerSection = 'home';
-        orderModalOpen = true;
+        if (isMobileView) {
+          customerSection = 'home';
+          orderModalOpen = true;
+        } else {
+          customerSection = 'pickup';
+          orderModalOpen = false;
+        }
       } else {
         customerSection = 'home';
         orderModalOpen = false;
@@ -448,8 +471,8 @@
 
   function openOrderModal() {
     currentView = 'customer';
-    customerSection = 'home';
-    orderModalOpen = true;
+    customerSection = isMobileView ? 'home' : 'pickup';
+    orderModalOpen = isMobileView;
     selectedOrder = null;
     orderTimeline = [];
     orderForm = {
@@ -463,6 +486,9 @@
 
   function closeOrderModal(shouldSync = true) {
     orderModalOpen = false;
+    if (!isMobileView) {
+      customerSection = 'home';
+    }
     orderForm = {
       ...initialOrderForm,
       address_id: String(defaultAddress?.id || '')
@@ -812,8 +838,9 @@
     />
   {/if}
 
-  {#if routeReady && orderModalOpen}
+  {#if routeReady && (orderModalOpen || (!isMobileView && customerSection === 'pickup'))}
     <OrderModal
+      inline={!isMobileView && customerSection === 'pickup'}
       {busy}
       {hasAddresses}
       {addresses}
