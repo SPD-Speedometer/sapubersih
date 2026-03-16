@@ -18,6 +18,11 @@
   let L;
   let locating = false;
   let locateError = '';
+  export function invalidate() {
+    if (map) {
+      map.invalidateSize();
+    }
+  }
 
   function googleMapsUrl(la, lo) {
     return `https://www.google.com/maps?q=${la},${lo}`;

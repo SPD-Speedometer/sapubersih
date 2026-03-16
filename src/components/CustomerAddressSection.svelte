@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import MapPicker from './MapPicker.svelte';
   import { Pencil, Trash2, RefreshCw } from 'lucide-svelte';
 
@@ -20,17 +20,20 @@
   let errors = {};
   let isMobile = false;
   let formModalOpen = false;
+  let mapPickerRef;
 
   function handleAddAddress() {
     onAdd();
     errors = {};
     if (isMobile) formModalOpen = true;
+    queueMapResize();
   }
 
   function handleEditAddress(address) {
     onEdit(address);
     errors = {};
     if (isMobile) formModalOpen = true;
+    queueMapResize();
   }
 
   function handleDeleteAddress(addressId) {
@@ -114,6 +117,12 @@
     if (isMobile) formModalOpen = false;
   }
 
+  async function queueMapResize() {
+    await tick();
+    await tick();
+    mapPickerRef?.invalidate();
+  }
+
   function updateIsMobile() {
     if (typeof window === 'undefined') return;
     isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -126,6 +135,10 @@
     window.addEventListener('resize', handler);
     return () => window.removeEventListener('resize', handler);
   });
+
+  $: if (formModalOpen && isMobile) {
+    queueMapResize();
+  }
 </script>
 
 <section class="section-grid address-layout">
@@ -239,6 +252,7 @@
         <span class="field-label">Pilih lokasi di peta</span>
         <p class="field-hint muted">Klik titik di peta atau gunakan tombol lokasi untuk mengisi koordinat otomatis.</p>
         <MapPicker
+          bind:this={mapPickerRef}
           lat={addressForm.lat ? Number(addressForm.lat) : 0}
           lng={addressForm.lng ? Number(addressForm.lng) : 0}
           height="280px"
