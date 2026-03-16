@@ -1,12 +1,16 @@
 <script>
   import MapPicker from './MapPicker.svelte';
-  import { Pencil, Trash2 } from 'lucide-svelte';
+  import { Pencil, Trash2, RefreshCw } from 'lucide-svelte';
 
   export let busy = false;
+  export let loading = false;
+  export let loaded = false;
+  const skeletonItems = [0, 1, 2];
   export let addresses = [];
   export let addressForm = {};
   export let editingAddressId = null;
   export let onAdd = () => {};
+  export let onRefresh = () => {};
   export let onSetDefault = () => {};
   export let onEdit = () => {};
   export let onDelete = () => {};
@@ -99,10 +103,42 @@
   <article class="panel">
     <div class="section-head">
       <h3>Alamat penjemputan</h3>
-      <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>Tambah Alamat</button>
+      <div class="section-actions">
+        <button
+          class="btn btn-ghost refresh-btn"
+          aria-label="Muat ulang daftar alamat"
+          on:click={onRefresh}
+          disabled={loading || busy}
+        >
+          <RefreshCw size={16} />
+          <span>Refresh</span>
+        </button>
+        <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>
+          Tambah Alamat
+        </button>
+      </div>
     </div>
 
-    {#if addresses.length === 0}
+    {#if loading && addresses.length > 0}
+      <div class="address-loading-inline" role="status" aria-live="polite">
+        <span class="loading-dots">
+          <span>.</span><span>.</span><span>.</span>
+        </span>
+        <span class="loading-text">Memuat data alamat...</span>
+      </div>
+    {/if}
+
+    {#if loading && addresses.length === 0}
+      <div class="address-loading" aria-label="Memuat daftar alamat">
+        {#each skeletonItems as i (i)}
+          <div class="address-card skeleton-card">
+            <div class="skeleton-line wide"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        {/each}
+      </div>
+    {:else if loaded && addresses.length === 0}
       <p class="muted">Belum ada alamat. Tambahkan alamat sebelum membuat order.</p>
     {:else}
       <div class="address-list">
@@ -194,6 +230,108 @@
 </section>
 
 <style>
+  .address-loading {
+    display: grid;
+    gap: 0.75rem;
+    min-height: 220px;
+  }
+
+  .skeleton-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-line {
+    height: 10px;
+    background: linear-gradient(90deg, #f0f2f6 25%, #e4e7ee 37%, #f0f2f6 63%);
+    background-size: 400% 100%;
+    border-radius: 8px;
+    animation: shimmer 1.2s ease-in-out infinite;
+    margin-bottom: 8px;
+  }
+
+  .skeleton-line.wide {
+    width: 70%;
+    height: 14px;
+  }
+
+  .skeleton-line.short {
+    width: 40%;
+    margin-bottom: 0;
+  }
+
+  .address-loading-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #ccead4;
+    background: #f0fff4;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    color: #15803d;
+    font-weight: 700;
+    font-size: 0.98rem;
+    animation: glow 1.2s ease-in-out infinite;
+  }
+
+  .loading-dots span {
+    display: inline-block;
+    animation: bounce 1s infinite;
+  }
+
+  .loading-dots span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .loading-dots span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes bounce {
+    0%, 80%, 100% {
+      transform: translateY(0);
+      opacity: 0.6;
+    }
+    40% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
+
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.25);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+  }
+
+  .section-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
   .field-label {
     display: block;
     font-weight: 500;

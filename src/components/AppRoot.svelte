@@ -54,6 +54,37 @@
   const initialPath = typeof window !== 'undefined' ? window.location.pathname : '/';
   const initialSession = get(session);
   const initialIsLoggedIn = Boolean(initialSession?.accessToken);
+  const ADDRESS_CACHE_KEY = 'sb.addressCache';
+
+  function loadAddressCache() {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(ADDRESS_CACHE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  function saveAddressCache(list) {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(ADDRESS_CACHE_KEY, JSON.stringify(list || []));
+    } catch (_e) {
+      // ignore quota errors
+    }
+  }
+
+  function clearAddressCache() {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.removeItem(ADDRESS_CACHE_KEY);
+    } catch (_e) {
+      // ignore
+    }
+  }
 
   let currentView =
     initialPath === '/login' || initialPath === '/register'
@@ -85,6 +116,8 @@
 
   let profile = null;
   let addresses = [];
+  let addressesLoading = false;
+  let addressesLoadedOnce = false;
   let orders = [];
   let wasteCategories = [];
   let serviceAreas = [];
@@ -319,7 +352,20 @@
   }
 
   async function loadAddresses() {
-    addresses = await fetchAddresses(api);
+    const cached = addresses.length === 0 ? loadAddressCache() : null;
+    addressesLoading = !cached;
+    if (cached) {
+      addresses = cached;
+      addressesLoadedOnce = true;
+    }
+    try {
+      const fresh = await fetchAddresses(api);
+      addresses = fresh;
+      saveAddressCache(fresh);
+      addressesLoadedOnce = true;
+    } finally {
+      addressesLoading = false;
+    }
   }
 
   async function loadOrders() {
@@ -490,6 +536,7 @@
       selectedOrder = null;
       orderTimeline = [];
       orderModalOpen = false;
+      clearAddressCache();
       verificationPopupDismissed = false;
       goPublic(true);
       setAlert('success', 'Logout berhasil.');
@@ -689,10 +736,13 @@
         {#if customerSection === 'address'}
           <CustomerAddressSection
             {busy}
+            loading={addressesLoading}
+            loaded={addressesLoadedOnce}
             {addresses}
             bind:addressForm={addressForm}
             {editingAddressId}
             onAdd={startAddAddress}
+            onRefresh={loadAddresses}
             onSetDefault={makeDefaultAddress}
             onEdit={startEditAddress}
             onDelete={removeAddress}

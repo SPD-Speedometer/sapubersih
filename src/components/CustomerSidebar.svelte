@@ -22,7 +22,9 @@
 </script>
 
 <aside class="sidebar">
-  <img class="sidebar-logo-full" src="/logo-sapu-bersih-navbar.png" alt="Logo Sapu Bersih" />
+  <button class="sidebar-logo-btn" type="button" on:click={onHome} aria-label="Kembali ke dashboard">
+    <img class="sidebar-logo-full" src="/logo-sapu-bersih-navbar.png" alt="Logo Sapu Bersih" />
+  </button>
 
   <div class="panel nav-panel">
     <button class:active={customerSection === 'home'} data-testid="sidebar-dashboard" on:click={onHome}>
