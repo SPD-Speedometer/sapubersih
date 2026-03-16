@@ -13,6 +13,8 @@
 
 .customer-content {
   padding-top: 0.5rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .customer-shell {
@@ -155,6 +157,41 @@
   border-radius: 22px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.68);
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 72px;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  display: none;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  padding: 0.4rem 0.35rem;
+  z-index: 40;
+}
+
+.bottom-nav button {
+  background: transparent;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.2rem;
+}
+
+.bottom-nav button.active {
+  color: var(--brand-strong);
+  background: rgba(36, 157, 90, 0.12);
+  border-radius: 14px;
 }
 
 .profile-panel {

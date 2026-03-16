@@ -13,6 +13,7 @@
   import CustomerProfileSection from './CustomerProfileSection.svelte';
   import VerificationPopup from './VerificationPopup.svelte';
   import OrderModal from './OrderModal.svelte';
+  import { LayoutDashboard, Truck, Clock3, MapPin, User } from 'lucide-svelte';
   import { api } from '../lib/api';
   import { session } from '../lib/session';
   import { toCurrency, toDate } from '../lib/format';
@@ -703,6 +704,29 @@
         {/if}
       </div>
     </section>
+
+    <nav class="bottom-nav">
+      <button class:active={customerSection === 'home'} type="button" on:click={() => goCustomer('home')}>
+        <LayoutDashboard size={22} strokeWidth={2} />
+        <span>Dashboard</span>
+      </button>
+      <button class:active={customerSection === 'pickup'} type="button" on:click={openOrderModal}>
+        <Truck size={22} strokeWidth={2} />
+        <span>Panggil</span>
+      </button>
+      <button class:active={customerSection === 'history'} type="button" on:click={() => goCustomer('history')}>
+        <Clock3 size={22} strokeWidth={2} />
+        <span>Riwayat</span>
+      </button>
+      <button class:active={customerSection === 'address'} type="button" on:click={() => goCustomer('address')}>
+        <MapPin size={22} strokeWidth={2} />
+        <span>Alamat</span>
+      </button>
+      <button class:active={customerSection === 'profile'} type="button" on:click={() => goCustomer('profile')}>
+        <User size={22} strokeWidth={2} />
+        <span>Profil</span>
+      </button>
+    </nav>
   {/if}
 
   {#if routeReady && showVerificationPopup}
