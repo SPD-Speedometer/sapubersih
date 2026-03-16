@@ -9,8 +9,9 @@ export const initialAddressForm = {
   receiver_name: '',
   receiver_phone: '',
   address_text: '',
-  lat: '',
-  lng: '',
+  // Default to central Yogyakarta coordinates so the map points somewhere meaningful
+  lat: -7.7956,
+  lng: 110.3695,
   maps_url: '',
   is_default: false
 };
