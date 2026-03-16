@@ -44,6 +44,12 @@
     };
   }
 
+  function toNumber(val) {
+    if (val === null || val === undefined) return null;
+    const parsed = Number(String(val).replace(',', '.'));
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
   function validateForm() {
     const isFilled = (val) => {
       if (typeof val === 'number') return !Number.isNaN(val);
@@ -51,11 +57,14 @@
     };
 
     const nextErrors = {};
+    const latNum = toNumber(addressForm.lat);
+    const lngNum = toNumber(addressForm.lng);
+
     if (!isFilled(addressForm.label)) nextErrors.label = 'Label alamat wajib diisi.';
     if (!isFilled(addressForm.receiver_name)) nextErrors.receiver_name = 'Nama penerima wajib diisi.';
     if (!isFilled(addressForm.receiver_phone)) nextErrors.receiver_phone = 'No. penerima wajib diisi.';
     if (!isFilled(addressForm.address_text)) nextErrors.address_text = 'Alamat lengkap wajib diisi.';
-    if (!isFilled(addressForm.lat) || !isFilled(addressForm.lng)) {
+    if (latNum === null || lngNum === null) {
       nextErrors.location = 'Titik lokasi di peta wajib dipilih.';
     }
     errors = nextErrors;
@@ -65,6 +74,16 @@
   function handleSubmit(event) {
     event.preventDefault();
     if (!validateForm()) return;
+
+    // Normalisasi koordinat ke angka titik desimal
+    const latNum = toNumber(addressForm.lat);
+    const lngNum = toNumber(addressForm.lng);
+    addressForm = {
+      ...addressForm,
+      lat: latNum,
+      lng: lngNum
+    };
+
     onSubmit();
   }
 </script>
