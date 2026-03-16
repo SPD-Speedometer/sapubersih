@@ -64,9 +64,7 @@
     if (!isFilled(addressForm.receiver_name)) nextErrors.receiver_name = 'Nama penerima wajib diisi.';
     if (!isFilled(addressForm.receiver_phone)) nextErrors.receiver_phone = 'No. penerima wajib diisi.';
     if (!isFilled(addressForm.address_text)) nextErrors.address_text = 'Alamat lengkap wajib diisi.';
-    if (latNum === null || lngNum === null) {
-      nextErrors.location = 'Titik lokasi di peta wajib dipilih.';
-    }
+    // lat/lng opsional untuk menyesuaikan backend; tidak memblokir submit
     errors = nextErrors;
     return Object.keys(nextErrors).length === 0;
   }
@@ -75,7 +73,7 @@
     event.preventDefault();
     if (!validateForm()) return;
 
-    // Normalisasi koordinat ke angka titik desimal
+    // Normalisasi koordinat ke angka titik desimal (opsional)
     const latNum = toNumber(addressForm.lat);
     const lngNum = toNumber(addressForm.lng);
     addressForm = {
