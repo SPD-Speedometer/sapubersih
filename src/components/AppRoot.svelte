@@ -162,6 +162,9 @@
     orderForm.qty && activePricingRule
       ? Number(orderForm.qty || 0) * Number(activePricingRule.price_base || 0)
       : 0;
+  $: if (!isMobileView && orderModalOpen) {
+    orderModalOpen = false;
+  }
   $: if (hasAddresses && !orderForm.address_id) {
     orderForm = { ...orderForm, address_id: String(defaultAddress?.id || '') };
   }
@@ -279,10 +282,6 @@
     }
 
     if (currentView === 'customer') {
-      if (orderModalOpen) {
-        return dashboardRoutes.pickup;
-      }
-
       if (customerSection === 'pickup') {
         return dashboardRoutes.pickup;
       }
@@ -349,13 +348,8 @@
         customerSection = 'profile';
         orderModalOpen = false;
       } else if (path === dashboardRoutes.pickup) {
-        if (isMobileView) {
-          customerSection = 'home';
-          orderModalOpen = true;
-        } else {
-          customerSection = 'pickup';
-          orderModalOpen = false;
-        }
+        customerSection = 'pickup';
+        orderModalOpen = false;
       } else {
         customerSection = 'home';
         orderModalOpen = false;
@@ -471,8 +465,8 @@
 
   function openOrderModal() {
     currentView = 'customer';
-    customerSection = isMobileView ? 'home' : 'pickup';
-    orderModalOpen = isMobileView;
+    customerSection = 'pickup';
+    orderModalOpen = false;
     selectedOrder = null;
     orderTimeline = [];
     orderForm = {
@@ -486,9 +480,7 @@
 
   function closeOrderModal(shouldSync = true) {
     orderModalOpen = false;
-    if (!isMobileView) {
-      customerSection = 'home';
-    }
+    customerSection = 'home';
     orderForm = {
       ...initialOrderForm,
       address_id: String(defaultAddress?.id || '')
@@ -838,9 +830,9 @@
     />
   {/if}
 
-  {#if routeReady && (orderModalOpen || (!isMobileView && customerSection === 'pickup'))}
+  {#if routeReady && customerSection === 'pickup'}
     <OrderModal
-      inline={!isMobileView && customerSection === 'pickup'}
+      inline={true}
       {busy}
       {hasAddresses}
       {addresses}
@@ -851,7 +843,7 @@
       {estimatedLineTotal}
       {toCurrency}
       {unitOptions}
-      onClose={closeOrderModal}
+      onClose={() => goCustomer('home')}
       onSubmit={submitPickupOrder}
       onAddAddressFirst={handleAddAddressFirst}
       onCategoryChange={handleOrderCategoryChange}
