@@ -254,8 +254,7 @@
   .inline-card {
     position: static;
     transform: none;
-    max-width: 840px;
-    width: 100%;
+    width: min(840px, 100%);
     margin: 0 auto;
     background: #fff;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
