@@ -86,6 +86,7 @@
   let profile = null;
   let addresses = [];
   let addressesLoading = false;
+  let addressesLoaded = false;
   let orders = [];
   let wasteCategories = [];
   let serviceAreas = [];
@@ -99,6 +100,38 @@
   let orderModalOpen = false;
   let editingAddressId = null;
   let verificationPopupDismissed = false;
+
+  const ADDRESS_CACHE_KEY = 'sb.addressCache';
+
+  function loadAddressCache() {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(ADDRESS_CACHE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  function saveAddressCache(list) {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(ADDRESS_CACHE_KEY, JSON.stringify(list || []));
+    } catch (_e) {
+      // ignore quota errors
+    }
+  }
+
+  function clearAddressCache() {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.removeItem(ADDRESS_CACHE_KEY);
+    } catch (_e) {
+      // ignore
+    }
+  }
 
   $: isLoggedIn = Boolean($session.accessToken);
   $: phoneVerified = Boolean(profile?.phone_verified_at || $session.user?.phone_verified_at);
@@ -325,9 +358,18 @@
   }
 
   async function loadAddresses() {
-    addressesLoading = true;
+    const cached = addresses.length === 0 ? loadAddressCache() : null;
+    if (cached) {
+      addresses = cached;
+      addressesLoaded = true;
+    }
+
+    addressesLoading = !cached;
     try {
-      addresses = await fetchAddresses(api);
+      const fresh = await fetchAddresses(api);
+      addresses = fresh;
+      saveAddressCache(fresh);
+      addressesLoaded = true;
     } finally {
       addressesLoading = false;
     }
@@ -498,6 +540,7 @@
       session.clearAuth();
       profile = null;
       addresses = [];
+      clearAddressCache();
       orders = [];
       selectedOrder = null;
       orderTimeline = [];
@@ -702,6 +745,7 @@
           <CustomerAddressSection
             {busy}
             loading={addressesLoading}
+            loaded={addressesLoaded}
             {addresses}
             bind:addressForm={addressForm}
             {editingAddressId}

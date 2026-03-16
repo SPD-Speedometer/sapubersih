@@ -4,6 +4,7 @@
 
   export let busy = false;
   export let loading = false;
+  export let loaded = false;
   export let addresses = [];
   export let addressForm = {};
   export let editingAddressId = null;
@@ -110,7 +111,11 @@
       </div>
     </div>
 
-    {#if addresses.length === 0}
+    {#if loading && addresses.length === 0}
+      <p class="muted">Memuat data alamat...</p>
+    {:else if !loaded && addresses.length === 0}
+      <p class="muted">Memuat data alamat...</p>
+    {:else if loaded && addresses.length === 0}
       <p class="muted">Belum ada alamat. Tambahkan alamat sebelum membuat order.</p>
     {:else}
       <div class="address-list">
