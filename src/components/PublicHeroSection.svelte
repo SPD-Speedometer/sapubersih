@@ -6,10 +6,9 @@
 <section class="hero-grid">
   <article class="hero-panel hero-main">
     <span class="badge">Layanan pickup untuk customer</span>
-    <h2>Jadwalkan penjemputan, pantau status, dan simpan riwayat order dalam satu dashboard.</h2>
+    <h2>Panggil kurir dari rumah untuk solusi sampahmu yang lebih praktis, rapi, dan mudah ditangani.</h2>
     <p>
-      Panggil kurir dengan mudah. Cukup daftarkan diri, isi data penjemputan, buat order, dan kurir akan
-      langsung mengambil sampahmu di rumah.
+      Cukup daftarkan diri, isi data penjemputan, buat order, dan kurir akan langsung mengambil sampahmu di rumah.
     </p>
 
     <div class="hero-buttons">
@@ -20,9 +19,7 @@
 
   <aside class="hero-panel hero-visual" aria-hidden="true">
     <img class="trash-illustration" src="/hero-recycle-green.png" alt="" />
-    <div class="hero-visual-copy">
-      <strong>Jemput sampah lebih rapi</strong>
-      <span>Order cepat, kurir datang, sampah langsung terangkut.</span>
-    </div>
+    <strong class="hero-visual-heading">Jemput sampah lebih rapi</strong>
+    <span class="hero-visual-sub">Order cepat, kurir datang, sampah langsung terangkut.</span>
   </aside>
 </section>

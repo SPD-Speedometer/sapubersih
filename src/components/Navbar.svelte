@@ -7,7 +7,9 @@
 <header class="site-header">
   <nav class="navbar">
     <div class="brand-lockup">
-      <img class="brand-logo" src="/logo-sapu-bersih-navbar.png" alt="Logo Sapu Bersih" />
+      <a class="brand-link" href="/">
+        <img class="brand-logo" src="/logo-sapu-bersih-navbar.png" alt="Logo Sapu Bersih" />
+      </a>
     </div>
 
     <div class="header-actions">

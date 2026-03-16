@@ -135,12 +135,12 @@ select:focus {
   padding: 0.92rem 1.3rem;
   cursor: pointer;
   font-weight: 700;
-  background: linear-gradient(135deg, #2d9657, #145433);
+  background: linear-gradient(135deg, #7bd13c, #249d5a);
   color: #fff;
-  border: 1px solid rgba(191, 231, 203, 0.36);
+  border: 1px solid rgba(123, 209, 60, 0.7);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 12px 24px rgba(16, 61, 38, 0.13);
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 14px 26px rgba(36, 157, 90, 0.26);
 }
 
 .btn:hover,

@@ -557,7 +557,7 @@
     onLogout={handleLogout}
   />
 
-  <AlertMessage {alert} />
+    <AlertMessage {alert} onClose={clearAlert} />
 
   {#if routeReady && currentView === 'public'}
     <PublicHeroSection onPickup={handlePublicPickupClick} onRegister={() => goAuth('register')} />
