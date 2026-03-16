@@ -113,6 +113,15 @@
       </div>
     </div>
 
+    {#if loading && addresses.length > 0}
+      <div class="address-loading-inline" role="status" aria-live="polite">
+        <span class="loading-dots">
+          <span>.</span><span>.</span><span>.</span>
+        </span>
+        <span class="loading-text">Memuat data alamat...</span>
+      </div>
+    {/if}
+
     {#if loading && addresses.length === 0}
       <p class="muted">Memuat data alamat...</p>
     {:else if !loaded && addresses.length === 0}
@@ -230,6 +239,57 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+  }
+
+  .address-loading-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #ccead4;
+    background: #f0fff4;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    color: #15803d;
+    font-weight: 700;
+    font-size: 0.98rem;
+    animation: glow 1.2s ease-in-out infinite;
+  }
+
+  .loading-dots span {
+    display: inline-block;
+    animation: bounce 1s infinite;
+  }
+
+  .loading-dots span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .loading-dots span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes bounce {
+    0%, 80%, 100% {
+      transform: translateY(0);
+      opacity: 0.6;
+    }
+    40% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
+
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.25);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
   }
 
   .spin {
