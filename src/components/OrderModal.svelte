@@ -213,7 +213,6 @@
                     <option value={unit}>{unit}</option>
                   {/each}
                 </select>
-              </select>
               </label>
             </div>
 
