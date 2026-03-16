@@ -189,7 +189,12 @@
           ? Object.entries(resp.errors).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
           : null;
       const apiMessage = resp?.message || (errorsArray ? errorsArray.join(', ') : null);
-      setAlert('error', apiMessage || error.message || 'Terjadi kesalahan pada sistem.');
+      const message = apiMessage || error.message || 'Terjadi kesalahan pada sistem.';
+      if (currentView === 'auth') {
+        authInlineAlert = message;
+      } else {
+        setAlert('error', message);
+      }
     } finally {
       busy = false;
     }
@@ -429,6 +434,7 @@
         phone: response.data?.user?.phone || '',
         otp_code: ''
       };
+      authInlineAlert = '';
       await bootstrapCustomer();
       goCustomer('home', true);
       setAlert('success', response.message);
