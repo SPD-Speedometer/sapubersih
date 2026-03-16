@@ -54,37 +54,6 @@
   const initialPath = typeof window !== 'undefined' ? window.location.pathname : '/';
   const initialSession = get(session);
   const initialIsLoggedIn = Boolean(initialSession?.accessToken);
-  const ADDRESS_CACHE_KEY = 'sb.addressCache';
-
-  function loadAddressCache() {
-    if (typeof localStorage === 'undefined') return null;
-    try {
-      const raw = localStorage.getItem(ADDRESS_CACHE_KEY);
-      if (!raw) return null;
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : null;
-    } catch (_e) {
-      return null;
-    }
-  }
-
-  function saveAddressCache(list) {
-    if (typeof localStorage === 'undefined') return;
-    try {
-      localStorage.setItem(ADDRESS_CACHE_KEY, JSON.stringify(list || []));
-    } catch (_e) {
-      // ignore quota errors
-    }
-  }
-
-  function clearAddressCache() {
-    if (typeof localStorage === 'undefined') return;
-    try {
-      localStorage.removeItem(ADDRESS_CACHE_KEY);
-    } catch (_e) {
-      // ignore
-    }
-  }
 
   let currentView =
     initialPath === '/login' || initialPath === '/register'
@@ -117,7 +86,7 @@
   let profile = null;
   let addresses = [];
   let addressesLoading = false;
-  let addressesLoadedOnce = false;
+  let addressesLoaded = false;
   let orders = [];
   let wasteCategories = [];
   let serviceAreas = [];
@@ -131,6 +100,45 @@
   let orderModalOpen = false;
   let editingAddressId = null;
   let verificationPopupDismissed = false;
+
+  const ADDRESS_CACHE_KEY = 'sb.addressCache';
+
+  const initialCachedAddresses =
+    typeof window !== 'undefined' ? loadAddressCache() : null;
+  if (initialCachedAddresses && Array.isArray(initialCachedAddresses)) {
+    addresses = initialCachedAddresses;
+    addressesLoaded = true;
+  }
+
+  function loadAddressCache() {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(ADDRESS_CACHE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  function saveAddressCache(list) {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(ADDRESS_CACHE_KEY, JSON.stringify(list || []));
+    } catch (_e) {
+      // ignore quota errors
+    }
+  }
+
+  function clearAddressCache() {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.removeItem(ADDRESS_CACHE_KEY);
+    } catch (_e) {
+      // ignore
+    }
+  }
 
   $: isLoggedIn = Boolean($session.accessToken);
   $: phoneVerified = Boolean(profile?.phone_verified_at || $session.user?.phone_verified_at);
@@ -222,7 +230,12 @@
           ? Object.entries(resp.errors).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
           : null;
       const apiMessage = resp?.message || (errorsArray ? errorsArray.join(', ') : null);
-      setAlert('error', apiMessage || error.message || 'Terjadi kesalahan pada sistem.');
+      const message = apiMessage || error.message || 'Terjadi kesalahan pada sistem.';
+      if (currentView === 'auth') {
+        authInlineAlert = message;
+      } else {
+        setAlert('error', message);
+      }
     } finally {
       busy = false;
     }
@@ -353,16 +366,17 @@
 
   async function loadAddresses() {
     const cached = addresses.length === 0 ? loadAddressCache() : null;
-    addressesLoading = !cached;
     if (cached) {
       addresses = cached;
-      addressesLoadedOnce = true;
+      addressesLoaded = true;
     }
+
+    addressesLoading = !cached;
     try {
       const fresh = await fetchAddresses(api);
       addresses = fresh;
       saveAddressCache(fresh);
-      addressesLoadedOnce = true;
+      addressesLoaded = true;
     } finally {
       addressesLoading = false;
     }
@@ -475,6 +489,7 @@
         phone: response.data?.user?.phone || '',
         otp_code: ''
       };
+      authInlineAlert = '';
       await bootstrapCustomer();
       goCustomer('home', true);
       setAlert('success', response.message);
@@ -532,11 +547,11 @@
       session.clearAuth();
       profile = null;
       addresses = [];
+      clearAddressCache();
       orders = [];
       selectedOrder = null;
       orderTimeline = [];
       orderModalOpen = false;
-      clearAddressCache();
       verificationPopupDismissed = false;
       goPublic(true);
       setAlert('success', 'Logout berhasil.');
@@ -737,7 +752,7 @@
           <CustomerAddressSection
             {busy}
             loading={addressesLoading}
-            loaded={addressesLoadedOnce}
+            loaded={addressesLoaded}
             {addresses}
             bind:addressForm={addressForm}
             {editingAddressId}

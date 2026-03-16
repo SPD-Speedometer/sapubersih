@@ -11,6 +11,11 @@
   let showLoginPassword = false;
   let showRegisterPassword = false;
   let showRegisterPasswordConfirmation = false;
+  $: passwordMismatch =
+    authMode === 'register' &&
+    registerForm.password &&
+    registerForm.password_confirmation &&
+    registerForm.password !== registerForm.password_confirmation;
 
   import loginIllustration from '../assets/login-truck-person.svg';
 </script>
@@ -110,6 +115,12 @@
 
     {#if authMode === 'register'}
       <form data-testid="form-register" on:submit|preventDefault={onRegisterSubmit}>
+        {#if inlineAlert}
+          <div class="alert error inline-alert">
+            <span>{inlineAlert}</span>
+            <button class="alert-close" type="button" aria-label="Tutup peringatan" on:click={() => (inlineAlert = '')}>×</button>
+          </div>
+        {/if}
         <p class="field-hint welcome">
           Daftarkan diri Anda
         </p>
@@ -248,6 +259,9 @@
               {/if}
             </button>
           </div>
+          {#if passwordMismatch}
+            <p class="field-error">Konfirmasi password tidak sama.</p>
+          {/if}
         </label>
         <button class="btn auth-submit wide" data-testid="register-submit" disabled={busy}>Daftar</button>
       </form>

@@ -5,7 +5,6 @@
   export let busy = false;
   export let loading = false;
   export let loaded = false;
-  const skeletonItems = [0, 1, 2];
   export let addresses = [];
   export let addressForm = {};
   export let editingAddressId = null;
@@ -104,18 +103,13 @@
     <div class="section-head">
       <h3>Alamat penjemputan</h3>
       <div class="section-actions">
-        <button
-          class="btn btn-ghost refresh-btn"
-          aria-label="Muat ulang daftar alamat"
-          on:click={onRefresh}
-          disabled={loading || busy}
-        >
-          <RefreshCw size={16} />
+        <button class="btn btn-ghost" type="button" on:click={onRefresh}>
+          <span class:spin={loading}>
+            <RefreshCw size={16} />
+          </span>
           <span>Refresh</span>
         </button>
-        <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>
-          Tambah Alamat
-        </button>
+        <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>Tambah Alamat</button>
       </div>
     </div>
 
@@ -129,15 +123,9 @@
     {/if}
 
     {#if loading && addresses.length === 0}
-      <div class="address-loading" aria-label="Memuat daftar alamat">
-        {#each skeletonItems as i (i)}
-          <div class="address-card skeleton-card">
-            <div class="skeleton-line wide"></div>
-            <div class="skeleton-line"></div>
-            <div class="skeleton-line short"></div>
-          </div>
-        {/each}
-      </div>
+      <p class="muted">Memuat data alamat...</p>
+    {:else if !loaded && addresses.length === 0}
+      <p class="muted">Memuat data alamat...</p>
     {:else if loaded && addresses.length === 0}
       <p class="muted">Belum ada alamat. Tambahkan alamat sebelum membuat order.</p>
     {:else}
@@ -230,34 +218,29 @@
 </section>
 
 <style>
-  .address-loading {
-    display: grid;
-    gap: 0.75rem;
-    min-height: 220px;
+  .field-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
   }
 
-  .skeleton-card {
-    position: relative;
-    overflow: hidden;
+  .field-hint {
+    font-size: 0.8rem;
+    margin: 0 0 0.5rem;
   }
 
-  .skeleton-line {
-    height: 10px;
-    background: linear-gradient(90deg, #f0f2f6 25%, #e4e7ee 37%, #f0f2f6 63%);
-    background-size: 400% 100%;
-    border-radius: 8px;
-    animation: shimmer 1.2s ease-in-out infinite;
-    margin-bottom: 8px;
+  .section-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
   }
 
-  .skeleton-line.wide {
-    width: 70%;
-    height: 14px;
-  }
-
-  .skeleton-line.short {
-    width: 40%;
-    margin-bottom: 0;
+  .section-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
   }
 
   .address-loading-inline {
@@ -311,35 +294,16 @@
     }
   }
 
-  .section-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .spin {
+    animation: spin 0.9s linear infinite;
   }
 
-  .section-actions .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
     }
-    100% {
-      background-position: 200% 0;
+    to {
+      transform: rotate(360deg);
     }
-  }
-
-  .field-label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 0.25rem;
-  }
-
-  .field-hint {
-    font-size: 0.8rem;
-    margin: 0 0 0.5rem;
   }
 </style>
