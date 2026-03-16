@@ -85,6 +85,7 @@
 
   let profile = null;
   let addresses = [];
+  let addressesLoading = false;
   let orders = [];
   let wasteCategories = [];
   let serviceAreas = [];
@@ -324,7 +325,12 @@
   }
 
   async function loadAddresses() {
-    addresses = await fetchAddresses(api);
+    addressesLoading = true;
+    try {
+      addresses = await fetchAddresses(api);
+    } finally {
+      addressesLoading = false;
+    }
   }
 
   async function loadOrders() {
@@ -695,6 +701,7 @@
         {#if customerSection === 'address'}
           <CustomerAddressSection
             {busy}
+            loading={addressesLoading}
             {addresses}
             bind:addressForm={addressForm}
             {editingAddressId}

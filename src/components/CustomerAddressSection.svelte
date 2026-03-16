@@ -3,6 +3,7 @@
   import { Pencil, Trash2, RefreshCw } from 'lucide-svelte';
 
   export let busy = false;
+  export let loading = false;
   export let addresses = [];
   export let addressForm = {};
   export let editingAddressId = null;
@@ -102,7 +103,7 @@
       <h3>Alamat penjemputan</h3>
       <div class="section-actions">
         <button class="btn btn-ghost" type="button" on:click={onRefresh}>
-          <RefreshCw size={16} />
+          <RefreshCw size={16} class:spin={loading} />
           <span>Refresh</span>
         </button>
         <button class="btn btn-ghost" data-testid="add-address-button" on:click={handleAddAddress}>Tambah Alamat</button>
@@ -222,5 +223,18 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+  }
+
+  .spin {
+    animation: spin 0.9s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>
