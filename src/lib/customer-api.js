@@ -53,11 +53,18 @@ export async function fetchOrderDetailBundle(api, orderId, fallbackOrder) {
   return { orderDetail, timeline };
 }
 
+function toNumberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null;
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  const parsed = Number(String(value).replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 export function buildAddressPayload(addressForm) {
   return cleanPayload({
     ...addressForm,
-    lat: addressForm.lat === '' ? null : Number(addressForm.lat),
-    lng: addressForm.lng === '' ? null : Number(addressForm.lng)
+    lat: toNumberOrNull(addressForm.lat),
+    lng: toNumberOrNull(addressForm.lng)
   });
 }
 
