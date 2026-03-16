@@ -6,66 +6,38 @@
   export let onLoginSubmit = () => {};
   export let onRegisterSubmit = () => {};
   export let onModeChange = () => {};
+  export let inlineAlert = '';
 
   let showLoginPassword = false;
   let showRegisterPassword = false;
   let showRegisterPasswordConfirmation = false;
+
+  import loginIllustration from '../assets/login-truck-person.svg';
 </script>
 
-<section class="auth-shell">
-  <article class="panel auth-intro">
-    <h2>
-      {authMode === 'register'
-        ? 'Daftarkan diri Anda untuk memanggil kurir dan mulai menggunakan layanan penjemputan.'
-        : 'Masuk untuk memanggil kurir dan melihat riwayat penjemputan.'}
-    </h2>
-    <div class="auth-illustration">
-      <svg viewBox="0 0 240 220" aria-hidden="true">
-        <defs>
-          <linearGradient id="authCardGradient" x1="0%" x2="100%" y1="0%" y2="100%">
-            <stop offset="0%" stop-color="#2d9657" />
-            <stop offset="100%" stop-color="#145433" />
-          </linearGradient>
-        </defs>
-
-        <rect x="36" y="30" width="168" height="160" rx="24" fill="#ffffff" stroke="#d9ebe0" stroke-width="2" />
-        <rect x="56" y="52" width="128" height="34" rx="17" fill="url(#authCardGradient)" opacity="0.12" />
-        <circle cx="85" cy="69" r="13" fill="url(#authCardGradient)" />
-        <path d="M77 69c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8-8-3.6-8-8Z" fill="#ffffff" opacity="0.95" />
-        <path d="M70 95c3.8-7.4 11.2-11.2 21.8-11.2 10.6 0 18 3.8 21.8 11.2" fill="none" stroke="#1f7f49" stroke-width="6" stroke-linecap="round" />
-
-        <rect x="56" y="103" width="128" height="12" rx="6" fill="#e4f2e9" />
-        <rect x="56" y="124" width="102" height="12" rx="6" fill="#edf7f0" />
-        <rect x="56" y="145" width="88" height="12" rx="6" fill="#edf7f0" />
-
-        <circle cx="178" cy="152" r="24" fill="url(#authCardGradient)" />
-        <path d="M178 141v22M167 152h22" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
-
-        <path d="M34 166c0-11 9-20 20-20h14" fill="none" stroke="#58b97a" stroke-width="6" stroke-linecap="round" opacity="0.75" />
-        <path d="M176 34c16 0 30 13 30 30" fill="none" stroke="#92d4a8" stroke-width="6" stroke-linecap="round" opacity="0.7" />
-      </svg>
-    </div>
-  </article>
-
+<section class="auth-shell single">
   <article class="panel auth-panel">
-    <div class="tabs">
-      <button class:active={authMode === 'login'} data-testid="tab-login" on:click={() => onModeChange('login')}>Login</button>
-      <button class:active={authMode === 'register'} data-testid="tab-register" on:click={() => onModeChange('register')}>
-        Register
-      </button>
-    </div>
-
     {#if authMode === 'login'}
       <form data-testid="form-login" on:submit|preventDefault={onLoginSubmit}>
+        {#if inlineAlert}
+          <div class="alert error inline-alert">
+            <span>{inlineAlert}</span>
+            <button class="alert-close" type="button" aria-label="Tutup peringatan" on:click={() => (inlineAlert = '')}>×</button>
+          </div>
+        {/if}
+        <p class="field-hint welcome">
+          Welcome to
+          <span class="brand-line">Sapu Bersih</span>
+        </p>
         <label class="field">
-          <span>No. WhatsApp</span>
+          <span>Email atau No. WhatsApp</span>
           <input
             data-testid="login-phone"
             bind:value={loginForm.phone}
             name="phone"
             autocomplete="username"
-            inputmode="tel"
-            placeholder="0812xxxx"
+            inputmode="text"
+            placeholder="email@contoh.com atau 0812xxxx"
           />
         </label>
         <label class="field">
@@ -123,12 +95,24 @@
             </button>
           </div>
         </label>
-        <button class="btn auth-submit" data-testid="login-submit" disabled={busy}>Masuk</button>
+        <div class="forgot-row">
+          <button class="link-button" type="button">Lupa password?</button>
+        </div>
+        <button class="btn auth-submit wide" data-testid="login-submit" disabled={busy}>Masuk</button>
+        <div class="sso sso-below">
+          <button type="button" class="sso-btn google">
+            <img class="sso-icon-img" src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="" />
+            <span>Login dengan Google</span>
+          </button>
+        </div>
       </form>
     {/if}
 
     {#if authMode === 'register'}
       <form data-testid="form-register" on:submit|preventDefault={onRegisterSubmit}>
+        <p class="field-hint welcome">
+          Daftarkan diri Anda
+        </p>
         <label class="field">
           <span>Nama lengkap</span>
           <input data-testid="register-name" bind:value={registerForm.name} name="name" autocomplete="name" placeholder="Nama customer" />
@@ -265,8 +249,19 @@
             </button>
           </div>
         </label>
-        <button class="btn auth-submit" data-testid="register-submit" disabled={busy}>Daftar</button>
+        <button class="btn auth-submit wide" data-testid="register-submit" disabled={busy}>Daftar</button>
       </form>
+      <div class="register-cta alt">
+        <span>Sudah punya akun?</span>
+        <button class="link-button" type="button" on:click={() => onModeChange('login')}>Masuk sekarang</button>
+      </div>
+    {/if}
+
+    {#if authMode === 'login'}
+      <div class="register-cta">
+        <span>Belum punya akun?</span>
+        <button class="link-button" type="button" on:click={() => onModeChange('register')}>Daftar sekarang</button>
+      </div>
     {/if}
   </article>
 </section>

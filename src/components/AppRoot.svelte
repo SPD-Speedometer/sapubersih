@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { get } from 'svelte/store';
   import Navbar from './Navbar.svelte';
   import AlertMessage from './AlertMessage.svelte';
   import PublicHeroSection from './PublicHeroSection.svelte';
@@ -9,6 +10,7 @@
   import CustomerHomeSection from './CustomerHomeSection.svelte';
   import CustomerHistorySection from './CustomerHistorySection.svelte';
   import CustomerAddressSection from './CustomerAddressSection.svelte';
+  import CustomerProfileSection from './CustomerProfileSection.svelte';
   import VerificationPopup from './VerificationPopup.svelte';
   import OrderModal from './OrderModal.svelte';
   import { api } from '../lib/api';
@@ -36,14 +38,39 @@
     saveAddressRequest,
     setDefaultAddressRequest,
     deleteAddressRequest,
-    submitPickupOrderRequest
+    submitPickupOrderRequest,
+    updateProfileRequest
   } from '../lib/customer-api';
 
-  const initialPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const dashboardRoutes = {
+    home: '/dashboard',
+    history: '/dashboard/riwayat',
+    address: '/dashboard/alamat',
+    pickup: '/dashboard/panggil-kurir',
+    profile: '/dashboard/profil'
+  };
 
-  let currentView = initialPath === '/login' || initialPath === '/register' ? 'auth' : 'public';
+  const initialPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const initialSession = get(session);
+  const initialIsLoggedIn = Boolean(initialSession?.accessToken);
+
+  let currentView =
+    initialPath === '/login' || initialPath === '/register'
+      ? 'auth'
+      : initialPath.startsWith('/dashboard')
+        ? initialIsLoggedIn
+          ? 'customer'
+          : 'auth'
+        : 'public';
   let authMode = initialPath === '/register' ? 'register' : 'login';
-  let customerSection = 'home';
+  let customerSection =
+    initialPath === dashboardRoutes.history
+      ? 'history'
+      : initialPath === dashboardRoutes.address
+        ? 'address'
+        : initialPath === dashboardRoutes.profile
+          ? 'profile'
+          : 'home';
   let routeReady = false;
   let busy = false;
   let alert = { type: '', text: '' };
@@ -53,6 +80,7 @@
   let loginForm = { ...initialLoginForm };
   let addressForm = { ...initialAddressForm };
   let orderForm = { ...initialOrderForm };
+  let profileForm = { name: '', email: '', phone: '' };
 
   let profile = null;
   let addresses = [];
@@ -64,17 +92,11 @@
   let orderTimeline = [];
   let selectedOrder = null;
   let orderHistoryWarning = '';
+  let authInlineAlert = '';
 
   let orderModalOpen = false;
   let editingAddressId = null;
   let verificationPopupDismissed = false;
-
-  const dashboardRoutes = {
-    home: '/dashboard',
-    history: '/dashboard/riwayat',
-    address: '/dashboard/alamat',
-    pickup: '/dashboard/panggil-kurir'
-  };
 
   $: isLoggedIn = Boolean($session.accessToken);
   $: phoneVerified = Boolean(profile?.phone_verified_at || $session.user?.phone_verified_at);
@@ -122,12 +144,18 @@
     };
 
     const initialize = async () => {
-      await loadPublicData();
-      if (isLoggedIn) {
-        await bootstrapCustomer();
+      routeReady = true; // tampilkan layout lebih cepat saat refresh/route awal
+      try {
+        await loadPublicData();
+        if (isLoggedIn) {
+          await bootstrapCustomer();
+        }
+        await applyRoute(window.location.pathname, { replace: true });
+      } catch (error) {
+        setAlert('error', error.message || 'Gagal memuat data awal.');
+      } finally {
+        routeReady = true;
       }
-      await applyRoute(window.location.pathname, { replace: true });
-      routeReady = true;
     };
 
     initialize();
@@ -244,6 +272,9 @@
       } else if (path === dashboardRoutes.address) {
         customerSection = 'address';
         orderModalOpen = false;
+      } else if (path === dashboardRoutes.profile) {
+        customerSection = 'profile';
+        orderModalOpen = false;
       } else if (path === dashboardRoutes.pickup) {
         customerSection = 'home';
         orderModalOpen = true;
@@ -266,6 +297,11 @@
   async function loadProfile() {
     const nextProfile = await fetchProfile(api);
     profile = nextProfile;
+    profileForm = {
+      name: nextProfile?.name || '',
+      email: nextProfile?.email || '',
+      phone: nextProfile?.phone || ''
+    };
     session.setUser(nextProfile);
     verifyForm = {
       ...verifyForm,
@@ -310,6 +346,7 @@
     orderModalOpen = false;
     selectedOrder = null;
     orderTimeline = [];
+    authInlineAlert = '';
     syncRoute(replace);
   }
 
@@ -319,6 +356,7 @@
     orderModalOpen = false;
     selectedOrder = null;
     orderTimeline = [];
+    if (mode !== 'login') authInlineAlert = '';
     syncRoute(replace);
   }
 
@@ -331,8 +369,8 @@
 
   function handlePublicPickupClick() {
     if (!isLoggedIn) {
+      authInlineAlert = 'Silakan login dulu sebelum memanggil kurir.';
       goAuth('login');
-      setAlert('error', 'Silakan login dulu sebelum memanggil kurir.');
       return;
     }
 
@@ -544,20 +582,30 @@
     goCustomer('address');
     startAddAddress();
   }
+
+  async function handleProfileSave() {
+    await withBusy(async () => {
+      const response = await updateProfileRequest(api, profileForm);
+      await loadProfile();
+      setAlert('success', response.message || 'Profil berhasil diperbarui.');
+    });
+  }
 </script>
 
 <svelte:head>
   <title>Sapu Bersih - Layanan Jemput Sampah</title>
 </svelte:head>
 
-<div class="app-shell">
-  <Navbar
-    {isLoggedIn}
-    onLogin={() => goAuth('login')}
-    onLogout={handleLogout}
-  />
+<div class={`app-shell ${currentView === 'customer' ? 'no-pad' : ''}`}>
+  {#if currentView !== 'customer'}
+    <Navbar
+      {isLoggedIn}
+      onLogin={() => goAuth('login')}
+      hideLogin={currentView === 'auth'}
+    />
+  {/if}
 
-    <AlertMessage {alert} onClose={clearAlert} />
+  <AlertMessage {alert} onClose={clearAlert} />
 
   {#if routeReady && currentView === 'public'}
     <PublicHeroSection onPickup={handlePublicPickupClick} onRegister={() => goAuth('register')} />
@@ -581,6 +629,7 @@
       {busy}
       {loginForm}
       {registerForm}
+      inlineAlert={authInlineAlert}
       onBack={goPublic}
       onLoginSubmit={handleLogin}
       onRegisterSubmit={handleRegister}
@@ -591,7 +640,6 @@
   {#if routeReady && currentView === 'customer'}
     <section class="customer-shell">
       <CustomerSidebar
-        {phoneVerified}
         {profile}
         sessionUser={$session.user}
         {customerSection}
@@ -599,6 +647,8 @@
         onPickup={openOrderModal}
         onHistory={() => goCustomer('history')}
         onAddress={() => goCustomer('address')}
+        onProfile={() => goCustomer('profile')}
+        onLogout={handleLogout}
       />
 
       <div class="customer-content">
@@ -639,6 +689,15 @@
             onDelete={removeAddress}
             onSubmit={saveAddress}
             onReset={resetAddressForm}
+          />
+        {/if}
+
+        {#if customerSection === 'profile'}
+          <CustomerProfileSection
+            {busy}
+            {profileForm}
+            onChange={(form) => (profileForm = form)}
+            onSubmit={handleProfileSave}
           />
         {/if}
       </div>

@@ -5,14 +5,93 @@
 }
 
 .auth-shell {
-  margin-top: 1rem;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.1fr);
+  max-width: 1180px;
+  margin: 2rem auto;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: clamp(1rem, 2vw, 1.8rem);
+  padding: clamp(0.5rem, 1vw, 1rem);
+  position: relative;
+  overflow: hidden;
 }
 
 .auth-intro {
-  display: grid;
-  align-content: space-between;
-  gap: 1rem;
+  display: none;
+}
+
+.auth-panel {
+  width: min(460px, 100%);
+}
+
+.auth-shell::before,
+.auth-shell::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(34px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.auth-shell::before {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(123, 209, 60, 0.22), rgba(123, 209, 60, 0));
+  top: -140px;
+  left: -80px;
+}
+
+.auth-shell::after {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.2), rgba(14, 165, 233, 0));
+  bottom: -120px;
+  right: -60px;
+}
+
+
+.sso {
+  width: 100%;
+  margin: 0.6rem 0 0;
+}
+
+.sso-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 115, 55, 0.12);
+  background: #ffffff;
+  box-shadow: 0 10px 20px rgba(17, 24, 39, 0.08);
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.sso-btn.google {
+  border-color: rgba(60, 64, 67, 0.14);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.sso-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: #f4f5f7;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 900;
+  color: #4285f4;
+}
+
+.sso-icon-img {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  object-fit: contain;
 }
 
 .auth-intro h2 {
@@ -24,26 +103,25 @@
 .auth-illustration {
   display: grid;
   place-items: center;
-  min-height: 240px;
-  margin-top: 0.35rem;
-  border-radius: 24px;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(236, 246, 240, 0.94)),
-    linear-gradient(120deg, rgba(20, 84, 51, 0.08), transparent);
-  border: 1px solid rgba(20, 84, 51, 0.1);
+  min-height: 280px;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
-.auth-illustration svg {
-  width: min(100%, 220px);
+.auth-illustration img {
+  width: min(100%, 340px);
   height: auto;
-  filter: drop-shadow(0 18px 28px rgba(16, 61, 38, 0.12));
+  filter: drop-shadow(0 18px 28px rgba(16, 61, 38, 0.14));
 }
 
 .tabs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.6rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 .tabs button,
@@ -100,6 +178,30 @@
   font-size: 0.93rem;
 }
 
+.field-hint {
+  margin: 0 0 0.4rem;
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.brand-line {
+  display: block;
+  margin-top: 0;
+  font-size: 1.9rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #7bd13c, #249d5a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.inline-alert {
+  margin: 0 0 0.6rem;
+}
+
+.inline-alert .alert-close {
+  border: none;
+}
 .field-row {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -107,6 +209,30 @@
 .auth-submit {
   margin-top: 0.4rem;
   border-radius: 16px;
+}
+.auth-submit.wide {
+  width: 100%;
+}
+
+.forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.3rem 0 0.6rem;
+}
+
+.register-cta {
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: #475467;
+  text-align: center;
+}
+
+.register-cta.alt {
+  margin-top: 0.9rem;
 }
 
 .checkbox {

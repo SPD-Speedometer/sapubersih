@@ -1,0 +1,42 @@
+<svg width="360" height="260" viewBox="0 0 360 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#16a34a" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0.25" />
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="360" height="260" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feOffset dy="8" />
+      <feGaussianBlur stdDeviation="18" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0 0 0 0 0 0.14 0 0 0 0 0.09 0 0 0 0.18 0" />
+      <feBlend in="SourceGraphic" />
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <rect x="26" y="20" width="308" height="220" rx="32" fill="#f8fdfb" />
+  </g>
+  <rect x="60" y="120" width="140" height="74" rx="14" fill="#e2f8ee" stroke="#c3ebd7" stroke-width="4" />
+  <rect x="204" y="92" width="82" height="102" rx="16" fill="#0ea5e9" opacity="0.18" />
+  <rect x="214" y="104" width="62" height="34" rx="10" fill="#e5f3ff" />
+  <rect x="78" y="138" width="46" height="10" rx="5" fill="#16a34a" opacity="0.6" />
+  <rect x="78" y="158" width="86" height="10" rx="5" fill="#16a34a" opacity="0.5" />
+  <path d="M60 186h220" stroke="#d1fae5" stroke-width="8" stroke-linecap="round" />
+  <circle cx="114" cy="200" r="18" fill="#0f172a" />
+  <circle cx="114" cy="200" r="8" fill="#cbd5e1" />
+  <circle cx="238" cy="200" r="18" fill="#0f172a" />
+  <circle cx="238" cy="200" r="8" fill="#cbd5e1" />
+  <path d="M126 116c10-18 30-32 58-38" stroke="#16a34a" stroke-width="6" stroke-linecap="round" opacity="0.55" />
+  <circle cx="174" cy="74" r="14" fill="#bbf7d0" opacity="0.7" />
+  <circle cx="262" cy="74" r="12" fill="#a5f3fc" opacity="0.7" />
+  <path d="M86 102c-10 0-18-8-18-18s8-18 18-18" stroke="#34d399" stroke-width="6" stroke-linecap="round" opacity="0.6" />
+  <path d="M254 182c5-16 18-24 36-24" stroke="#0f172a" stroke-width="6" stroke-linecap="round" opacity="0.15" />
+  <path d="M222 136c0-16 12-28 28-28" stroke="#22c55e" stroke-width="6" stroke-linecap="round" opacity="0.4" />
+  <rect x="120" y="54" width="120" height="26" rx="13" fill="url(#g2)" />
+  <path d="M198 126c-16 18-32 38-44 60" stroke="#16a34a" stroke-width="6" stroke-linecap="round" opacity="0.35" />
+  <circle cx="92" cy="214" r="6" fill="#34d399" />
+  <circle cx="258" cy="214" r="6" fill="#34d399" />
+  <path d="M140 84c0-12 12-22 28-22" stroke="#0ea5e9" stroke-width="6" stroke-linecap="round" opacity="0.4" />
+</svg>

@@ -77,6 +77,12 @@ select:focus {
   padding: 72px 0 40px;
 }
 
+.app-shell.no-pad {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .site-header,
 .panel,
 .hero-panel,

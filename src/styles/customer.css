@@ -11,17 +11,35 @@
   gap: 1rem;
 }
 
+.customer-content {
+  padding-top: 0.5rem;
+}
+
 .customer-shell {
-  margin-top: 1rem;
-  grid-template-columns: minmax(250px, 290px) minmax(0, 1fr);
+  margin-top: 0;
+  grid-template-columns: 220px minmax(0, 1fr);
   align-items: start;
+  padding-top: 0;
 }
 
 .sidebar {
   display: grid;
   gap: 1rem;
   position: sticky;
-  top: 24px;
+  top: 0;
+  align-content: start;
+  min-height: 100vh;
+  background: #ffffff;
+  box-shadow: 8px 0 26px rgba(17, 24, 39, 0.06);
+}
+
+.sidebar-logo-full {
+  width: 100%;
+  display: block;
+  padding: 1.2rem 1rem 0.8rem;
+  object-fit: contain;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 0.4rem;
 }
 
 .profile-card h2 {
@@ -35,7 +53,99 @@
 
 .nav-panel {
   display: grid;
+  gap: 0.6rem;
+  padding: 0.25rem;
+  box-shadow: none;
+  margin-top: -0.2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nav-panel button {
+  display: flex;
+  align-items: center;
   gap: 0.7rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 14px;
+  border: 0;
+  background: transparent;
+  color: #1f2937;
+  font-weight: 700;
+  text-align: left;
+  box-shadow: none;
+}
+
+.nav-panel button .nav-icon {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: #0f172a;
+}
+
+.nav-panel button.active {
+  background: linear-gradient(135deg, #7bd13c, #249d5a);
+  color: #ffffff;
+  border: 0;
+  box-shadow: none;
+}
+
+.nav-panel button.active .nav-icon {
+  background: transparent;
+  color: #ffffff;
+}
+
+.sidebar-footer {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.6rem 0.2rem 0.6rem;
+}
+
+.sidebar-account {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sidebar-logout-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.sidebar-account-avatar {
+  width: 2.7rem;
+  height: 2.7rem;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #10b981, #0ea5e9);
+  color: #fff;
+  font-weight: 800;
+}
+
+.sidebar-account-text strong {
+  display: block;
+}
+
+.sidebar-account-text span {
+  color: #6b7280;
+  font-size: 0.86rem;
+}
+
+.sidebar-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(220, 38, 38, 0.18);
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.1), rgba(248, 113, 113, 0.02));
+  color: #b91c1c;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: none;
 }
 
 .summary-grid {
@@ -52,6 +162,21 @@
   border-radius: 22px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.68);
+}
+
+.profile-panel {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.profile-header h2 {
+  margin: 0.3rem 0 0.2rem;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
 }
 
 .summary-card {

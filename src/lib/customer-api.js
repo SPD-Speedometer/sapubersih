@@ -97,6 +97,15 @@ export async function logoutRequest(api) {
   return api.post('/auth/logout');
 }
 
+export async function updateProfileRequest(api, profileForm) {
+  const payload = cleanPayload({
+    name: profileForm.name,
+    email: profileForm.email,
+    phone: profileForm.phone
+  });
+  return api.patch('/me', payload);
+}
+
 export async function submitPickupOrderRequest(api, orderForm) {
   const createPayload = cleanPayload({
     address_id: Number(orderForm.address_id),

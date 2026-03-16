@@ -1,7 +1,7 @@
 <script>
   export let isLoggedIn = false;
   export let onLogin = () => {};
-  export let onLogout = () => {};
+  export let hideLogin = false;
 </script>
 
 <header class="site-header">
@@ -12,12 +12,10 @@
       </a>
     </div>
 
-    <div class="header-actions">
-      {#if !isLoggedIn}
+    {#if !hideLogin && !isLoggedIn}
+      <div class="header-actions">
         <button class="btn btn-login" data-testid="nav-login" on:click={onLogin}>Login</button>
-      {:else}
-        <button class="btn btn-ghost" data-testid="nav-logout" on:click={onLogout}>Logout</button>
-      {/if}
-    </div>
+      </div>
+    {/if}
   </nav>
 </header>
