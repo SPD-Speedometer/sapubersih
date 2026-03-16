@@ -246,17 +246,21 @@
 
 <style>
   .inline-shell {
-    padding: 1rem 0;
+    padding: 1.5rem 0;
+    display: flex;
+    justify-content: center;
   }
 
   .inline-card {
     position: static;
     transform: none;
-    box-shadow: none;
     max-width: 840px;
+    width: 100%;
     margin: 0 auto;
     background: #fff;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    border: 1px solid #edf0f5;
+    padding: 1.25rem 1.5rem;
   }
 </style>
