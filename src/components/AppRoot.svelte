@@ -752,6 +752,26 @@
           />
         {/if}
 
+        {#if customerSection === 'pickup'}
+          <OrderModal
+            inline={true}
+            {busy}
+            {hasAddresses}
+            {addresses}
+            {wasteCategories}
+            {orderForm}
+            {activePricingRule}
+            {currentWasteCategory}
+            {estimatedLineTotal}
+            {toCurrency}
+            {unitOptions}
+            onClose={() => goCustomer('home')}
+            onSubmit={submitPickupOrder}
+            onAddAddressFirst={handleAddAddressFirst}
+            onCategoryChange={handleOrderCategoryChange}
+          />
+        {/if}
+
         {#if customerSection === 'history'}
           <CustomerHistorySection
             {orders}
@@ -827,26 +847,6 @@
       onSubmit={handleVerifyPhone}
       onResend={handleResendOtp}
       onDismiss={() => (verificationPopupDismissed = true)}
-    />
-  {/if}
-
-  {#if routeReady && customerSection === 'pickup'}
-    <OrderModal
-      inline={true}
-      {busy}
-      {hasAddresses}
-      {addresses}
-      {wasteCategories}
-      {orderForm}
-      {activePricingRule}
-      {currentWasteCategory}
-      {estimatedLineTotal}
-      {toCurrency}
-      {unitOptions}
-      onClose={() => goCustomer('home')}
-      onSubmit={submitPickupOrder}
-      onAddAddressFirst={handleAddAddressFirst}
-      onCategoryChange={handleOrderCategoryChange}
     />
   {/if}
 </div>
