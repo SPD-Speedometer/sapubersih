@@ -249,12 +249,15 @@
     padding: 1.5rem 0;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding-inline: clamp(1rem, 4vw, 2.5rem);
   }
 
   .inline-card {
     position: static;
     transform: none;
-    width: min(840px, 100%);
+    width: min(920px, 100%);
     margin: 0 auto;
     background: #fff;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
