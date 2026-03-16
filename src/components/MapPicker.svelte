@@ -23,7 +23,7 @@
     return `https://www.google.com/maps?q=${la},${lo}`;
   }
 
-  function updateMarkerPosition(la, lo, pan = true) {
+  async function updateMarkerPosition(la, lo, pan = true) {
     lat = parseFloat(Number(la).toFixed(6));
     lng = parseFloat(Number(lo).toFixed(6));
 
@@ -42,6 +42,20 @@
       lng: String(lng),
       maps_url: googleMapsUrl(lat, lng)
     });
+
+    try {
+      const addressText = await reverseGeocode(lat, lng);
+      if (addressText) {
+        dispatch('change', {
+          lat: String(lat),
+          lng: String(lng),
+          maps_url: googleMapsUrl(lat, lng),
+          address_text: addressText
+        });
+      }
+    } catch (_err) {
+      // abaikan kegagalan geocode
+    }
   }
 
   function locateMe() {
@@ -116,6 +130,14 @@
   onDestroy(() => {
     if (map) map.remove();
   });
+
+  async function reverseGeocode(la, lo) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${la}&lon=${lo}&accept-language=id`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.display_name || null;
+  }
 </script>
 
 <div class="map-picker-inline">

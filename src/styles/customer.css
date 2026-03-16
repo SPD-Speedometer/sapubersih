@@ -238,6 +238,13 @@
   justify-content: flex-end;
 }
 
+.field-error {
+  margin: 0.2rem 0 0;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 .summary-card {
   padding: 1rem 1.1rem;
   background:
