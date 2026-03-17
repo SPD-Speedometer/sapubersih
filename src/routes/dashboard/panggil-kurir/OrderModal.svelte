@@ -1,7 +1,4 @@
 <script>
-  import flatpickr from 'flatpickr';
-  import 'flatpickr/dist/flatpickr.css';
-
   export let busy = false;
   export let hasAddresses = false;
   export let addresses = [];
@@ -61,32 +58,6 @@
     if (orderForm.pricing_rule_id) applyPricingRuleById(orderForm.pricing_rule_id);
   });
 
-  function datetimePicker(node, value) {
-    const fp = flatpickr(node, {
-      enableTime: true,
-      dateFormat: 'Y-m-d H:i',
-      altInput: true,
-      altFormat: 'd M Y, H:i',
-      time_24hr: true,
-      defaultDate: value || null,
-      allowInput: true,
-      onChange(selectedDates, dateStr) {
-        orderForm = { ...orderForm, requested_pickup_at: dateStr };
-      }
-    });
-
-    return {
-      update(newValue) {
-        if (newValue !== value) {
-          value = newValue;
-          fp.setDate(newValue || null, false);
-        }
-      },
-      destroy() {
-        fp.destroy();
-      }
-    };
-  }
 </script>
 
 {#if inline}
@@ -128,8 +99,8 @@
             <input
               data-testid="order-requested-pickup-at"
               bind:value={orderForm.requested_pickup_at}
-              use:datetimePicker={orderForm.requested_pickup_at}
-              type="text"
+              type="datetime-local"
+              step="900"
               placeholder="Pilih tanggal & jam"
             />
           </label>
@@ -350,14 +321,6 @@
     font-weight: 600;
   }
 
-  :global(.flatpickr-input),
-  :global(.flatpickr-alt-input) {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    width: -webkit-fill-available;
-  }
-
   .inline-card input,
   .inline-card textarea,
   .inline-card select {
@@ -380,8 +343,8 @@
       overflow-x: hidden;
     }
 
-    :global(.flatpickr-input),
-    :global(.flatpickr-alt-input) {
+    /* ensure native datetime input stays within viewport */
+    input[type='datetime-local'] {
       display: block;
       max-width: 100% !important;
       margin: 0 auto;
