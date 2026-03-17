@@ -18,6 +18,7 @@
   export let onCategoryChange = () => {};
 
   let selectedPricingRuleId = orderForm.pricing_rule_id ? String(orderForm.pricing_rule_id) : '';
+  let errors = { address: '', datetime: '', category: '', qty: '' };
 
   function applyPricingRuleById(id) {
     if (!id) return;
@@ -58,6 +59,34 @@
     if (orderForm.pricing_rule_id) applyPricingRuleById(orderForm.pricing_rule_id);
   });
 
+  function validateForm() {
+    errors = { address: '', datetime: '', category: '', qty: '' };
+    let ok = true;
+    if (!orderForm.address_id) {
+      errors.address = 'Pilih alamat penjemputan.';
+      ok = false;
+    }
+    if (!orderForm.requested_pickup_at) {
+      errors.datetime = 'Jadwal pickup wajib diisi.';
+      ok = false;
+    }
+    if (!selectedPricingRuleId || !orderForm.waste_category_id) {
+      errors.category = 'Pilih kategori sampah.';
+      ok = false;
+    }
+    if (!orderForm.qty || Number(orderForm.qty) <= 0) {
+      errors.qty = 'Isi estimasi jumlah sampah.';
+      ok = false;
+    }
+    return ok;
+  }
+
+  function handleSubmit(event) {
+    event?.preventDefault();
+    if (!validateForm()) return;
+    onSubmit();
+  }
+
 </script>
 
 {#if inline}
@@ -83,15 +112,21 @@
           </button>
         </div>
       {:else}
-        <form data-testid="order-form" on:submit|preventDefault={onSubmit}>
+        <form data-testid="order-form" on:submit|preventDefault={handleSubmit}>
           <label class="field">
             <span>Alamat penjemputan</span>
-            <select data-testid="order-address-id" bind:value={orderForm.address_id}>
+            <select
+              data-testid="order-address-id"
+              bind:value={orderForm.address_id}
+              class:error={Boolean(errors.address)}
+              aria-invalid={Boolean(errors.address)}
+            >
               <option value="">Pilih alamat</option>
               {#each addresses as address}
                 <option value={String(address.id)}>{address.label} - {address.address_text}</option>
               {/each}
             </select>
+            {#if errors.address}<small class="error-text">{errors.address}</small>{/if}
           </label>
 
           <label class="field">
@@ -102,7 +137,10 @@
               type="datetime-local"
               step="900"
               placeholder="Pilih tanggal & jam"
+              class:error={Boolean(errors.datetime)}
+              aria-invalid={Boolean(errors.datetime)}
             />
+            {#if errors.datetime}<small class="error-text">{errors.datetime}</small>{/if}
           </label>
 
           <label class="field">
@@ -119,17 +157,34 @@
 
           <label class="field">
             <span>Kategori sampah (berdasar pricing rule)</span>
-            <select data-testid="order-waste-category-id" bind:value={selectedPricingRuleId} on:change={handlePricingSelect}>
+            <select
+              data-testid="order-waste-category-id"
+              bind:value={selectedPricingRuleId}
+              on:change={handlePricingSelect}
+              class:error={Boolean(errors.category)}
+              aria-invalid={Boolean(errors.category)}
+            >
               <option value="">Pilih kategori & metode</option>
               {#each pricingRules as rule}
                 <option value={String(rule.id)}>{getRuleLabel(rule)}</option>
               {/each}
             </select>
+            {#if errors.category}<small class="error-text">{errors.category}</small>{/if}
           </label>
 
           <label class="field">
             <span>Estimasi jumlah ({orderForm.unit || activePricingRule?.unit || currentWasteCategory?.default_unit || 'unit'})</span>
-            <input data-testid="order-qty" bind:value={orderForm.qty} type="number" min="0" step="0.1" placeholder="0" />
+            <input
+              data-testid="order-qty"
+              bind:value={orderForm.qty}
+              type="number"
+              min="0"
+              step="0.1"
+              placeholder="0"
+              class:error={Boolean(errors.qty)}
+              aria-invalid={Boolean(errors.qty)}
+            />
+            {#if errors.qty}<small class="error-text">{errors.qty}</small>{/if}
           </label>
 
           <label class="field">
@@ -182,15 +237,21 @@
             </button>
           </div>
         {:else}
-          <form data-testid="order-form" on:submit|preventDefault={onSubmit}>
+          <form data-testid="order-form" on:submit|preventDefault={handleSubmit}>
             <label class="field">
               <span>Alamat penjemputan</span>
-              <select data-testid="order-address-id" bind:value={orderForm.address_id}>
+              <select
+                data-testid="order-address-id"
+                bind:value={orderForm.address_id}
+                class:error={Boolean(errors.address)}
+                aria-invalid={Boolean(errors.address)}
+              >
                 <option value="">Pilih alamat</option>
                 {#each addresses as address}
                   <option value={String(address.id)}>{address.label} - {address.address_text}</option>
                 {/each}
               </select>
+              {#if errors.address}<small class="error-text">{errors.address}</small>{/if}
             </label>
 
             <label class="field">
@@ -198,10 +259,13 @@
               <input
                 data-testid="order-requested-pickup-at"
                 bind:value={orderForm.requested_pickup_at}
-                use:datetimePicker={orderForm.requested_pickup_at}
-                type="text"
+                type="datetime-local"
+                step="900"
                 placeholder="Pilih tanggal & jam"
+                class:error={Boolean(errors.datetime)}
+                aria-invalid={Boolean(errors.datetime)}
               />
+              {#if errors.datetime}<small class="error-text">{errors.datetime}</small>{/if}
             </label>
 
             <label class="field">
@@ -218,17 +282,34 @@
 
             <label class="field">
               <span>Kategori sampah (berdasar pricing rule)</span>
-              <select data-testid="order-waste-category-id" bind:value={selectedPricingRuleId} on:change={handlePricingSelect}>
-                <option value="">Pilih kategori & metode</option>
+            <select
+              data-testid="order-waste-category-id"
+              bind:value={selectedPricingRuleId}
+              on:change={handlePricingSelect}
+              class:error={Boolean(errors.category)}
+              aria-invalid={Boolean(errors.category)}
+            >
+              <option value="">Pilih kategori & metode</option>
               {#each pricingRules as rule}
                 <option value={String(rule.id)}>{getRuleLabel(rule)}</option>
               {/each}
             </select>
+            {#if errors.category}<small class="error-text">{errors.category}</small>{/if}
           </label>
 
             <label class="field">
               <span>Estimasi jumlah ({orderForm.unit || activePricingRule?.unit || currentWasteCategory?.default_unit || 'unit'})</span>
-              <input data-testid="order-qty" bind:value={orderForm.qty} type="number" min="0" step="0.1" placeholder="0" />
+              <input
+                data-testid="order-qty"
+                bind:value={orderForm.qty}
+                type="number"
+                min="0"
+                step="0.1"
+                placeholder="0"
+                class:error={Boolean(errors.qty)}
+                aria-invalid={Boolean(errors.qty)}
+              />
+              {#if errors.qty}<small class="error-text">{errors.qty}</small>{/if}
             </label>
 
             <label class="field">
@@ -346,6 +427,20 @@
     display: block;
     white-space: normal;
     word-break: break-word;
+  }
+
+  input.error,
+  select.error,
+  textarea.error {
+    border-color: #ef4444;
+    outline: none;
+  }
+
+  .error-text {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+    display: block;
   }
 
   @media (max-width: 640px) {
