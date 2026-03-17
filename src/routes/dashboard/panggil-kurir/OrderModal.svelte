@@ -365,6 +365,18 @@
     box-sizing: border-box;
   }
 
+  @media (max-width: 640px) {
+    .inline-card form {
+      width: 100%;
+    }
+
+    :global(.flatpickr-input),
+    :global(.flatpickr-alt-input) {
+      display: block;
+      max-width: calc(100vw - 32px);
+    }
+  }
+
   .mt-gap {
     margin-top: 0.75rem;
   }
