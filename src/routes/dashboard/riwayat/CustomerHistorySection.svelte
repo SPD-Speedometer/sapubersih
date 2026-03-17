@@ -191,11 +191,9 @@
           </div>
         </div>
       </div>
-        {/if}
-      </div>
     {/if}
-    </article>
-  {/if}
+  </article>
+{/if}
 </section>
 
 <style>
