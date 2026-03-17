@@ -305,6 +305,8 @@
     transform: none;
     width: min(920px, 100%);
     margin: 0 auto;
+    max-height: none;
+    overflow: visible;
     background: #fff;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
     border-radius: 16px;
