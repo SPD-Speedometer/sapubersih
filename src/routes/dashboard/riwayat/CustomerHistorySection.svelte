@@ -174,7 +174,7 @@
           <div class="timeline-list">
             {#each timelineEntries as entry}
               <div
-                class={`timeline-card ${entry.state}`}
+                class={`timeline-row ${entry.state}`}
                 style={`--tl-color:${entry.color}; --tl-muted:${entry.muted}; --tl-badge-bg:${entry.badgeBg}; --tl-badge-text:${entry.badgeText};`}
               >
                 <div class="timeline-marker"></div>
@@ -219,7 +219,7 @@
     padding-left: 0;
   }
 
-  .timeline-card {
+  .timeline-row {
     position: relative;
     display: grid;
     grid-template-columns: 18px 1fr;
@@ -227,7 +227,7 @@
     align-items: flex-start;
   }
 
-  .timeline-card::before {
+  .timeline-row::before {
     content: '';
     position: absolute;
     left: 7px;
@@ -237,7 +237,7 @@
     background: #e5e7eb;
   }
 
-  .timeline-card:last-child::before {
+  .timeline-row:last-child::before {
     display: none;
   }
 
@@ -251,13 +251,13 @@
     box-shadow: 0 0 0 6px color-mix(in srgb, var(--tl-color, #16a34a) 12%, transparent);
   }
 
-  .timeline-card.done .timeline-marker {
+  .timeline-row.done .timeline-marker {
     background: var(--tl-color, #16a34a);
     border-color: var(--tl-color, #16a34a);
     box-shadow: 0 0 0 6px color-mix(in srgb, var(--tl-color, #16a34a) 20%, transparent);
   }
 
-  .timeline-card.done::before {
+  .timeline-row.done::before {
     background: linear-gradient(var(--tl-color, #16a34a), var(--tl-color, #16a34a));
   }
 
@@ -289,14 +289,14 @@
     color: color-mix(in srgb, var(--tl-muted, #6b7280) 80%, #ffffff);
   }
 
-  .timeline-card.pending .timeline-marker {
+  .timeline-row.pending .timeline-marker {
     background: #fff;
     border-color: var(--tl-color, #cbd5e1);
   }
 
-  .timeline-card.pending .timeline-content strong,
-  .timeline-card.pending .timeline-content span,
-  .timeline-card.pending .timeline-content small {
+  .timeline-row.pending .timeline-content strong,
+  .timeline-row.pending .timeline-content span,
+  .timeline-row.pending .timeline-content small {
     color: var(--tl-muted, #94a3b8);
   }
 </style>
