@@ -6,6 +6,7 @@
   export let hasAddresses = false;
   export let addresses = [];
   export let wasteCategories = [];
+  export let pricingRules = [];
   export let orderForm = {};
   export let activePricingRule = null;
   export let currentWasteCategory = null;
@@ -18,10 +19,51 @@
   export let onAddAddressFirst = () => {};
   export let onCategoryChange = () => {};
 
+  let selectedPricingRuleId = orderForm.pricing_rule_id ? String(orderForm.pricing_rule_id) : '';
+
+  function applyPricingRuleById(id) {
+    if (!id) return;
+    const rule = pricingRules.find((r) => String(r.id) === String(id));
+    if (!rule) return;
+    selectedPricingRuleId = String(id);
+    orderForm = {
+      ...orderForm,
+      pricing_rule_id: String(rule.id),
+      waste_category_id: String(rule.waste_category_id),
+      calc_method: rule.calc_method,
+      unit: rule.unit || rule.default_unit || orderForm.unit
+    };
+  }
+
+  function findCategoryName(id) {
+    return wasteCategories.find((c) => String(c.id) === String(id))?.name || 'Tanpa nama';
+  }
+
+  function getRuleLabel(rule) {
+    const unit = rule.unit || rule.default_unit || '';
+    return `${findCategoryName(rule.waste_category_id)} - ${rule.calc_method} - ${unit}`;
+  }
+
+  function handlePricingSelect(event) {
+    const value = event.target.value;
+    if (value) {
+      applyPricingRuleById(value);
+      onCategoryChange();
+    } else {
+      selectedPricingRuleId = '';
+      orderForm = { ...orderForm, pricing_rule_id: '', waste_category_id: '', calc_method: orderForm.calc_method };
+    }
+  }
+
+  import { onMount } from 'svelte';
+  onMount(() => {
+    if (orderForm.pricing_rule_id) applyPricingRuleById(orderForm.pricing_rule_id);
+  });
+
   function datetimePicker(node, value) {
     const fp = flatpickr(node, {
       enableTime: true,
-      dateFormat: "Y-m-d\\TH:i",
+      dateFormat: 'Y-m-d H:i',
       altInput: true,
       altFormat: 'd M Y, H:i',
       time_24hr: true,
@@ -75,29 +117,16 @@
             </select>
           </label>
 
-          <div class="field-row">
-            <label class="field">
-              <span>Metode hitung</span>
-              <select data-testid="order-calc-method" bind:value={orderForm.calc_method}>
-                <option value="weighing">Weighing</option>
-                <option value="trashbag">Trashbag</option>
-                <option value="pickup">Pickup</option>
-                <option value="truck">Truck</option>
-                <option value="manual">Manual</option>
-              </select>
-            </label>
-
-            <label class="field">
-              <span>Jadwal pickup</span>
-              <input
-                data-testid="order-requested-pickup-at"
-                bind:value={orderForm.requested_pickup_at}
-                use:datetimePicker={orderForm.requested_pickup_at}
-                type="text"
-                placeholder="Pilih tanggal & jam"
-              />
-            </label>
-          </div>
+          <label class="field">
+            <span>Jadwal pickup</span>
+            <input
+              data-testid="order-requested-pickup-at"
+              bind:value={orderForm.requested_pickup_at}
+              use:datetimePicker={orderForm.requested_pickup_at}
+              type="text"
+              placeholder="Pilih tanggal & jam"
+            />
+          </label>
 
           <label class="field">
             <span>Catatan untuk kurir</span>
@@ -112,37 +141,26 @@
           <div class="divider"></div>
 
           <label class="field">
-            <span>Kategori sampah</span>
-            <select data-testid="order-waste-category-id" bind:value={orderForm.waste_category_id} on:change={onCategoryChange}>
-              <option value="">Pilih kategori</option>
-              {#each wasteCategories as category}
-                <option value={category.id}>{category.name}</option>
+            <span>Kategori sampah (berdasar pricing rule)</span>
+            <select data-testid="order-waste-category-id" bind:value={selectedPricingRuleId} on:change={handlePricingSelect}>
+              <option value="">Pilih kategori & metode</option>
+              {#each pricingRules as rule}
+                <option value={String(rule.id)}>{getRuleLabel(rule)}</option>
               {/each}
             </select>
           </label>
 
-          <div class="field-row">
-            <label class="field">
-              <span>Estimasi jumlah</span>
-              <input data-testid="order-qty" bind:value={orderForm.qty} type="number" min="0" step="0.1" placeholder="0" />
-            </label>
-
-            <label class="field">
-              <span>Satuan</span>
-              <select data-testid="order-unit" bind:value={orderForm.unit}>
-                {#each unitOptions(orderForm.calc_method, currentWasteCategory?.default_unit) as unit}
-                  <option value={unit}>{unit}</option>
-                {/each}
-              </select>
-            </label>
-          </div>
+          <label class="field">
+            <span>Estimasi jumlah ({orderForm.unit || activePricingRule?.unit || currentWasteCategory?.default_unit || 'unit'})</span>
+            <input data-testid="order-qty" bind:value={orderForm.qty} type="number" min="0" step="0.1" placeholder="0" />
+          </label>
 
           <label class="field">
             <span>Catatan item</span>
             <textarea data-testid="order-item-notes" bind:value={orderForm.item_notes} rows="2" placeholder="Contoh: plastik botol campur kardus."></textarea>
           </label>
 
-          <div class="estimate-card" data-testid="order-estimate-card">
+          <div class="estimate-card mt-2 mt-gap" data-testid="order-estimate-card">
             <div>
               <span>Estimasi harga</span>
               <strong>{estimatedLineTotal ? toCurrency(estimatedLineTotal) : 'Akan dihitung backend'}</strong>
@@ -156,9 +174,8 @@
             </small>
           </div>
 
-          <div class="stack-actions">
+          <div class="stack-actions mt-gap">
             <button class="btn" data-testid="order-submit" disabled={busy}>Submit Order</button>
-            <button class="btn btn-ghost" data-testid="order-cancel" type="button" on:click={onClose}>Batal</button>
           </div>
         </form>
       {/if}
@@ -194,29 +211,16 @@
               </select>
             </label>
 
-            <div class="field-row">
-              <label class="field">
-                <span>Metode hitung</span>
-                <select data-testid="order-calc-method" bind:value={orderForm.calc_method}>
-                  <option value="weighing">Weighing</option>
-                  <option value="trashbag">Trashbag</option>
-                  <option value="pickup">Pickup</option>
-                  <option value="truck">Truck</option>
-                  <option value="manual">Manual</option>
-                </select>
-              </label>
-
-              <label class="field">
-                <span>Jadwal pickup</span>
-                <input
-                  data-testid="order-requested-pickup-at"
-                  bind:value={orderForm.requested_pickup_at}
-                  use:datetimePicker={orderForm.requested_pickup_at}
-                  type="text"
-                  placeholder="Pilih tanggal & jam"
-                />
-              </label>
-            </div>
+            <label class="field">
+              <span>Jadwal pickup</span>
+              <input
+                data-testid="order-requested-pickup-at"
+                bind:value={orderForm.requested_pickup_at}
+                use:datetimePicker={orderForm.requested_pickup_at}
+                type="text"
+                placeholder="Pilih tanggal & jam"
+              />
+            </label>
 
             <label class="field">
               <span>Catatan untuk kurir</span>
@@ -231,30 +235,19 @@
             <div class="divider"></div>
 
             <label class="field">
-              <span>Kategori sampah</span>
-              <select data-testid="order-waste-category-id" bind:value={orderForm.waste_category_id} on:change={onCategoryChange}>
-                <option value="">Pilih kategori</option>
-                {#each wasteCategories as category}
-                  <option value={category.id}>{category.name}</option>
-                {/each}
-              </select>
+              <span>Kategori sampah (berdasar pricing rule)</span>
+              <select data-testid="order-waste-category-id" bind:value={selectedPricingRuleId} on:change={handlePricingSelect}>
+                <option value="">Pilih kategori & metode</option>
+              {#each pricingRules as rule}
+                <option value={String(rule.id)}>{getRuleLabel(rule)}</option>
+              {/each}
+            </select>
+          </label>
+
+            <label class="field">
+              <span>Estimasi jumlah ({orderForm.unit || activePricingRule?.unit || currentWasteCategory?.default_unit || 'unit'})</span>
+              <input data-testid="order-qty" bind:value={orderForm.qty} type="number" min="0" step="0.1" placeholder="0" />
             </label>
-
-            <div class="field-row">
-              <label class="field">
-                <span>Estimasi jumlah</span>
-                <input data-testid="order-qty" bind:value={orderForm.qty} type="number" min="0" step="0.1" placeholder="0" />
-              </label>
-
-              <label class="field">
-                <span>Satuan</span>
-                <select data-testid="order-unit" bind:value={orderForm.unit}>
-                  {#each unitOptions(orderForm.calc_method, currentWasteCategory?.default_unit) as unit}
-                    <option value={unit}>{unit}</option>
-                  {/each}
-                </select>
-              </label>
-            </div>
 
             <label class="field">
               <span>Catatan item</span>
@@ -317,5 +310,9 @@
 
   :global(.flatpickr-input) {
     width: 100%;
+  }
+
+  .mt-gap {
+    margin-top: 0.75rem;
   }
 </style>

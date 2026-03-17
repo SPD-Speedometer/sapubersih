@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/favicon-sapu-bersih.png" />
+    <link rel="icon" type="image/png" href="%sveltekit.assets%/favicon-sapu-bersih.png" />
     <title>Sapu Bersih - Layanan Jemput Sampah</title>
     <meta
       name="description"
@@ -16,9 +16,9 @@
       content="Daftarkan akun, isi alamat penjemputan, buat order, dan biarkan kurir Sapu Bersih mengambil sampahmu."
     />
     <meta property="og:type" content="website" />
+    %sveltekit.head%
   </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+  <body class="antialiased">
+    <div style="display: contents">%sveltekit.body%</div>
   </body>
 </html>

@@ -7,12 +7,12 @@
   import ServiceSummarySection from './ServiceSummarySection.svelte';
   import AuthSection from './AuthSection.svelte';
   import CustomerSidebar from './CustomerSidebar.svelte';
-  import CustomerHomeSection from './CustomerHomeSection.svelte';
-  import CustomerHistorySection from './CustomerHistorySection.svelte';
-  import CustomerAddressSection from './CustomerAddressSection.svelte';
-  import CustomerProfileSection from './CustomerProfileSection.svelte';
+  import CustomerHomeSection from '../routes/dashboard/CustomerHomeSection.svelte';
+  import CustomerHistorySection from '../routes/dashboard/riwayat/CustomerHistorySection.svelte';
+  import CustomerAddressSection from '../routes/dashboard/alamat/CustomerAddressSection.svelte';
+  import CustomerProfileSection from '../routes/dashboard/profil/CustomerProfileSection.svelte';
   import VerificationPopup from './VerificationPopup.svelte';
-  import OrderModal from './OrderModal.svelte';
+  import OrderModal from '../routes/dashboard/panggil-kurir/OrderModal.svelte';
   import { LayoutDashboard, Truck, Clock3, MapPin, User } from 'lucide-svelte';
   import { api } from '../lib/api';
   import { session } from '../lib/session';
@@ -43,6 +43,9 @@
     updateProfileRequest
   } from '../lib/customer-api';
 
+  export let initialView = null;
+  export let initialSection = null;
+
   const dashboardRoutes = {
     home: '/dashboard',
     history: '/dashboard/riwayat',
@@ -56,16 +59,18 @@
   const initialIsLoggedIn = Boolean(initialSession?.accessToken);
 
   let currentView =
-    initialPath === '/login' || initialPath === '/register'
+    initialView ||
+    (initialPath === '/login' || initialPath === '/register'
       ? 'auth'
       : initialPath.startsWith('/dashboard')
         ? initialIsLoggedIn
           ? 'customer'
           : 'auth'
-        : 'public';
+        : 'public');
   let authMode = initialPath === '/register' ? 'register' : 'login';
   let customerSection =
-    initialPath === dashboardRoutes.history
+    initialSection ||
+    (initialPath === dashboardRoutes.history
       ? 'history'
       : initialPath === dashboardRoutes.address
         ? 'address'
@@ -73,7 +78,7 @@
           ? 'profile'
           : initialPath === dashboardRoutes.pickup
             ? 'pickup'
-            : 'home';
+            : 'home');
   let routeReady = false;
   let busy = false;
   let alert = { type: '', text: '' };
@@ -662,9 +667,16 @@
   }
 
   function handleOrderCategoryChange() {
+    const ruleFromId = pricingRules.find((r) => String(r.id) === String(orderForm.pricing_rule_id));
     orderForm = {
       ...orderForm,
-      unit: currentWasteCategory?.default_unit === 'manual' ? 'kg' : currentWasteCategory?.default_unit || 'kg'
+      unit:
+        ruleFromId?.unit ||
+        ruleFromId?.default_unit ||
+        activePricingRule?.unit ||
+        activePricingRule?.default_unit ||
+        (currentWasteCategory?.default_unit === 'manual' ? 'kg' : currentWasteCategory?.default_unit) ||
+        'kg'
     };
   }
 
@@ -761,7 +773,8 @@
             {hasAddresses}
             {addresses}
             {wasteCategories}
-            {orderForm}
+            {pricingRules}
+            bind:orderForm={orderForm}
             {activePricingRule}
             {currentWasteCategory}
             {estimatedLineTotal}

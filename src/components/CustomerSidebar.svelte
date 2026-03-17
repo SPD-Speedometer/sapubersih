@@ -51,13 +51,19 @@
       </span>
       Alamat
     </button>
-    <div class="sidebar-footer">
-      <button class="sidebar-account" type="button" on:click={onProfile}>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-account">
+      <button class="sidebar-account-main" type="button" on:click={onProfile}>
         <div class="sidebar-account-avatar">{initials}</div>
         <div class="sidebar-account-text">
           <strong>{displayName}</strong>
           <span>{displayEmail}</span>
         </div>
+      </button>
+      <button class="sidebar-logout-icon" type="button" on:click={onLogout} aria-label="Logout">
+        <LogOut size={18} />
       </button>
     </div>
   </div>
