@@ -342,8 +342,10 @@
     font-weight: 600;
   }
 
-  :global(.flatpickr-input) {
+  :global(.flatpickr-input),
+  :global(.flatpickr-alt-input) {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .mt-gap {
