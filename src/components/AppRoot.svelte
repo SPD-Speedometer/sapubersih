@@ -104,6 +104,7 @@
   let orderHistoryWarning = '';
   let authInlineAlert = '';
   let hasOngoingOrder = false;
+  let showHistoryDetailMobile = false;
 
   let orderModalOpen = false;
   let editingAddressId = null;
@@ -437,6 +438,7 @@
       orderTimeline = bundle.timeline;
       currentView = 'customer';
       customerSection = 'history';
+      showHistoryDetailMobile = isMobileView;
       orderModalOpen = false;
       syncRoute();
     });
@@ -464,6 +466,9 @@
   function goCustomer(section = 'home', replace = false) {
     currentView = 'customer';
     customerSection = section;
+    if (section !== 'history') {
+      showHistoryDetailMobile = false;
+    }
     orderModalOpen = false;
     syncRoute(replace);
   }
@@ -807,8 +812,11 @@
             {statusLabel}
             {toCurrency}
             {toDate}
+            {isMobileView}
+            showHistoryDetail={showHistoryDetailMobile}
             onRefresh={loadOrders}
             onOpenOrder={openOrderDetail}
+            onBackDetail={() => (showHistoryDetailMobile = false)}
           />
         {/if}
 

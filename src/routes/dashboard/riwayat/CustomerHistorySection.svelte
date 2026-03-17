@@ -6,8 +6,11 @@
   export let statusLabel = (value) => value;
   export let toCurrency = (value) => value;
   export let toDate = (value) => value;
+  export let isMobileView = false;
+  export let showHistoryDetail = false;
   export let onRefresh = () => {};
   export let onOpenOrder = () => {};
+  export let onBackDetail = () => {};
 
   $: courierInfo = selectedOrder
     ? {
@@ -88,7 +91,8 @@
 </script>
 
 <section class="section-grid history-layout">
-  <article class="panel">
+  {#if !(isMobileView && showHistoryDetail)}
+    <article class="panel">
     <div class="section-head">
       <h3>Riwayat order</h3>
       <button class="btn btn-ghost" on:click={onRefresh}>Refresh</button>
@@ -113,10 +117,15 @@
         {/each}
       </div>
     {/if}
-  </article>
+    </article>
+  {/if}
 
-  <article class="panel">
+  {#if !isMobileView || showHistoryDetail}
+    <article class={`panel ${isMobileView ? 'panel-mobile-detail' : ''}`}>
     <h3>Detail order</h3>
+    {#if isMobileView && showHistoryDetail}
+      <button class="btn btn-ghost back-btn" type="button" on:click={onBackDetail}>← Kembali</button>
+    {/if}
     {#if !selectedOrder}
       <p class="muted">Pilih salah satu order untuk melihat detail dan timeline.</p>
     {:else}
@@ -182,8 +191,11 @@
           </div>
         </div>
       </div>
+        {/if}
+      </div>
     {/if}
-  </article>
+    </article>
+  {/if}
 </section>
 
 <style>
@@ -279,5 +291,15 @@
   .timeline-row.pending .timeline-content span,
   .timeline-row.pending .timeline-content small {
     color: var(--tl-muted, #94a3b8);
+  }
+
+  .panel-mobile-detail {
+    width: 100%;
+  }
+
+  .back-btn {
+    margin: 0.4rem 0 0.8rem;
+    padding-left: 0;
+    color: var(--color-brand-800, #0f172a);
   }
 </style>
