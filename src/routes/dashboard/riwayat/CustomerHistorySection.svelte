@@ -68,9 +68,9 @@
       }
 
       const palette = {
-        done: { color: '#22c55e', muted: '#0f172a', badgeBg: '#dcfce7', badgeText: '#166534', badgeLabel: 'Selesai' },
-        current: { color: '#f97316', muted: '#0f172a', badgeBg: '#ffedd5', badgeText: '#c2410c', badgeLabel: 'Berjalan' },
-        upcoming: { color: '#94a3b8', muted: '#94a3b8', badgeBg: '#e2e8f0', badgeText: '#475569', badgeLabel: 'Menunggu' }
+        done: { color: '#22c55e', muted: '#0f172a' },
+        current: { color: '#f97316', muted: '#0f172a' },
+        upcoming: { color: '#94a3b8', muted: '#94a3b8' }
       };
 
       const theme = palette[state];
@@ -81,10 +81,7 @@
         note: entry.note || '',
         state,
         color: theme.color,
-        muted: theme.muted,
-        badgeBg: theme.badgeBg,
-        badgeText: theme.badgeText,
-        badgeLabel: theme.badgeLabel
+        muted: theme.muted
       };
     });
   })();
@@ -173,16 +170,12 @@
           <h4>Timeline</h4>
           <div class="timeline-list">
             {#each timelineEntries as entry}
-              <div
-                class={`timeline-row ${entry.state}`}
-                style={`--tl-color:${entry.color}; --tl-muted:${entry.muted}; --tl-badge-bg:${entry.badgeBg}; --tl-badge-text:${entry.badgeText};`}
-              >
+              <div class={`timeline-row ${entry.state}`} style={`--tl-color:${entry.color}; --tl-muted:${entry.muted};`}>
                 <div class="timeline-marker"></div>
                 <div class="timeline-content">
                   <strong>{entry.label}</strong>
                   <span>{entry.date ? toDate(entry.date) : 'Belum tercatat'}</span>
-                  <span class="timeline-badge">{entry.badgeLabel}</span>
-                  <small>{entry.note || 'Perubahan status tercatat di backend.'}</small>
+                  {#if entry.note}<small>{entry.note}</small>{/if}
                 </div>
               </div>
             {/each}
@@ -270,18 +263,6 @@
     display: block;
     color: var(--tl-muted, #1f2937);
     font-size: 0.95rem;
-  }
-
-  .timeline-badge {
-    display: inline-block;
-    margin: 0.35rem 0;
-    padding: 0.2rem 0.6rem;
-    border-radius: 999px;
-    background: var(--tl-badge-bg, #e2e8f0);
-    color: var(--tl-badge-text, #475569);
-    font-size: 0.78rem;
-    font-weight: 600;
-    width: fit-content;
   }
 
   .timeline-content small {
