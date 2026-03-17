@@ -329,6 +329,18 @@
     box-sizing: border-box;
   }
 
+  .inline-card input[type='datetime-local'] {
+    height: 44px;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 1rem;
+    color: #0f172a;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   .inline-card .field > span {
     max-width: 100%;
     display: block;
