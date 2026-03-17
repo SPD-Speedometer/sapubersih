@@ -297,13 +297,16 @@
     justify-content: center;
     align-items: flex-start;
     width: 100%;
+    max-width: 100vw;
     padding-inline: clamp(1rem, 4vw, 2.5rem);
+    overflow-x: hidden;
   }
 
   .inline-card {
     position: static;
     transform: none;
     width: min(920px, 100%);
+    max-width: 100%;
     margin: 0 auto;
     max-height: none;
     overflow: visible;
@@ -329,6 +332,7 @@
 
     .inline-card {
       width: 100%;
+      max-width: 100vw;
       margin: 0;
       border-radius: 0;
       border: none;
