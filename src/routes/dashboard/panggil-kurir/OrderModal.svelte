@@ -279,7 +279,7 @@
               </small>
             </div>
 
-            <div class="stack-actions">
+            <div class="stack-actions mb-gap">
               <button class="btn" data-testid="order-submit" disabled={busy}>Submit Order</button>
               <button class="btn btn-ghost" data-testid="order-cancel" type="button" on:click={onClose}>Batal</button>
             </div>
@@ -353,6 +353,6 @@
   }
 
   .mb-gap {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 </style>
