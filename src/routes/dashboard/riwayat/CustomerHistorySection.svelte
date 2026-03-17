@@ -346,6 +346,11 @@
     margin-bottom: 0.75rem;
   }
 
+  .section-head-inline h3 {
+    margin: 0;
+    line-height: 1.2;
+  }
+
   .section-head-inline .section-actions {
     display: flex;
     align-items: center;
