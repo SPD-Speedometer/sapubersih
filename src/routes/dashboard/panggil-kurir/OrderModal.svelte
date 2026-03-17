@@ -322,6 +322,7 @@
     .inline-shell {
       padding: 0;
       margin-top: 0.75rem;
+      padding-bottom: 1.25rem;
     }
 
     .inline-card {
