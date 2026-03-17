@@ -353,8 +353,9 @@
   :global(.flatpickr-input),
   :global(.flatpickr-alt-input) {
     width: 100%;
-    box-sizing: border-box;
     max-width: 100%;
+    box-sizing: border-box;
+    width: -webkit-fill-available;
   }
 
   .inline-card input,
@@ -368,12 +369,14 @@
   @media (max-width: 640px) {
     .inline-card form {
       width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     :global(.flatpickr-input),
     :global(.flatpickr-alt-input) {
       display: block;
-      max-width: calc(90vw - 16px);
+      max-width: 100% !important;
       margin: 0 auto;
     }
   }
