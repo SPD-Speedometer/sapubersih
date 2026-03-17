@@ -357,6 +357,14 @@
     max-width: 100%;
   }
 
+  .inline-card input,
+  .inline-card textarea,
+  .inline-card select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
   .mt-gap {
     margin-top: 0.75rem;
   }
