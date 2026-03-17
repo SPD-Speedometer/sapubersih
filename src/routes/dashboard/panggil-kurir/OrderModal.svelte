@@ -356,4 +356,10 @@
   .mb-gap {
     margin-bottom: 1.25rem;
   }
+
+  @media (max-width: 640px) {
+    .mb-gap {
+      margin-bottom: 2.5rem;
+    }
+  }
 </style>
