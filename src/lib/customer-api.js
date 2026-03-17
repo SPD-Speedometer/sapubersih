@@ -1,6 +1,21 @@
 import { cleanPayload } from './format';
 import { isoFromLocal } from './order-helpers';
 
+function normalizeOrders(payload) {
+  const candidates = [
+    payload,
+    payload?.orders,
+    payload?.data,
+    payload?.data?.orders,
+    payload?.data?.orders?.data, // pagination style: { orders: { data: [...] } }
+    payload?.data?.data
+  ];
+  const orders = candidates.find((c) => Array.isArray(c)) || [];
+  return Array.isArray(orders)
+    ? orders.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+    : [];
+}
+
 export async function fetchPublicData(api) {
   const [categoryRes, areaRes, pricingRes, depotRes] = await Promise.all([
     api.get('/waste-categories'),
@@ -28,8 +43,24 @@ export async function fetchAddresses(api) {
 }
 
 export async function fetchOrders(api) {
-  const response = await api.get('/orders?limit=20');
-  return response.data?.orders || [];
+  const endpoints = ['/orders?limit=20', '/customer/orders?limit=20', '/customer/orders/history?limit=20'];
+
+  let lastError;
+  for (const path of endpoints) {
+    try {
+      const response = await api.get(path);
+      return normalizeOrders(response.data);
+    } catch (error) {
+      lastError = error;
+      if (error?.status && ![403, 404].includes(error.status)) {
+        throw error;
+      }
+      // try next fallback on 403/404
+    }
+  }
+
+  if (lastError) throw lastError;
+  return [];
 }
 
 export async function fetchOrderDetailBundle(api, orderId, fallbackOrder) {

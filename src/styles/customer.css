@@ -211,6 +211,22 @@
   margin-top: 0.5rem;
 }
 
+.welcome-panel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.2rem 0 0.6rem;
+}
+
+.welcome-panel h2 {
+  margin: 0.1rem 0 0.2rem;
+}
+
+.welcome-panel p {
+  margin: 0.12rem 0;
+  line-height: 1.35;
+}
+
 .summary-card,
 .estimate-card,
 .history-card,

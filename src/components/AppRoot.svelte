@@ -191,6 +191,9 @@
     };
   }
 
+  $: displayName = profile?.name || $session.user?.name || 'Sahabat Bersih';
+  $: lastOrderDate = orders[0]?.created_at ? toDate(orders[0].created_at) : null;
+
   onMount(() => {
     const handlePopState = async () => {
       await applyRoute(window.location.pathname, { replace: true });
@@ -761,6 +764,8 @@
             {addresses}
             {statusLabel}
             {toDate}
+            {displayName}
+            {lastOrderDate}
             onPickup={openOrderModal}
             onOpenOrder={openOrderDetail}
           />

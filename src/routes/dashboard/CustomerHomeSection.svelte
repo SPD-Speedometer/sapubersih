@@ -5,7 +5,20 @@
   export let toDate = (value) => value;
   export let onPickup = () => {};
   export let onOpenOrder = () => {};
+  export let displayName = 'Sahabat Bersih';
+  export let lastOrderDate = null;
 </script>
+
+<section class="panel welcome-panel">
+  <div>
+    <p class="eyebrow">Selamat datang</p>
+    <h2>Halo, {displayName}!</h2>
+    <p class="muted">
+      Kelola penjemputan, alamat, dan riwayatmu di sini.
+      {#if lastOrderDate} Order terakhir: {lastOrderDate}.{/if}
+    </p>
+  </div>
+</section>
 
 <section class="summary-grid">
   <article class="panel summary-card accent">
