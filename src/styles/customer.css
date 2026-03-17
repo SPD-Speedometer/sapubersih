@@ -35,6 +35,19 @@
   box-shadow: 8px 0 26px rgba(17, 24, 39, 0.06);
 }
 
+.sidebar-logo-btn {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: block;
+  text-decoration: none;
+}
+
+.bg-light {
+  background: #f9fafb;
+}
+
 .sidebar-logo-full {
   width: 100%;
   display: block;
@@ -115,6 +128,12 @@
   width: 100%;
   text-align: left;
   cursor: pointer;
+  overflow: hidden;
+}
+
+.sidebar-account-text {
+  min-width: 0;
+  flex: 1;
 }
 
 .sidebar-account-avatar {
@@ -130,11 +149,18 @@
 
 .sidebar-account-text strong {
   display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar-account-text span {
   color: #6b7280;
   font-size: 0.86rem;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar-actions {
