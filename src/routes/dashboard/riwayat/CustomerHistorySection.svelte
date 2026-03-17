@@ -216,13 +216,13 @@
     position: relative;
     display: grid;
     gap: 0.65rem;
-    padding-left: 0.8rem;
+    padding-left: 0;
   }
 
   .timeline-card {
     position: relative;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 18px 1fr;
     gap: 0.75rem;
     align-items: flex-start;
   }
