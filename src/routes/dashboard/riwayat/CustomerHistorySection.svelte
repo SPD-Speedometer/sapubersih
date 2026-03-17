@@ -355,5 +355,14 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    margin-left: auto;
+  }
+
+  @media (max-width: 900px) {
+    .section-head-inline {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
   }
 </style>
