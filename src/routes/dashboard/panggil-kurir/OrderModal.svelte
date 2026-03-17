@@ -366,6 +366,13 @@
     box-sizing: border-box;
   }
 
+  .inline-card .field > span {
+    max-width: 100%;
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+  }
+
   @media (max-width: 640px) {
     .inline-card form {
       width: 100%;
