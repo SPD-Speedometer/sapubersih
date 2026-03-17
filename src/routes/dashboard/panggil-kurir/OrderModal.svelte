@@ -321,6 +321,7 @@
     /* Hilangkan margin/padding luar di tampilan mobile agar menempel ke tepi */
     .inline-shell {
       padding: 0;
+      margin-top: 0.75rem;
     }
 
     .inline-card {
