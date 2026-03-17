@@ -61,17 +61,30 @@
 
     return statusOrder.map((status, idx) => {
       const entry = timelineMap[status] || {};
-      const state = currentIndex >= 0 && idx <= currentIndex ? 'done' : 'pending';
-      const color = state === 'done' ? '#16a34a' : '#cbd5e1';
-      const muted = state === 'done' ? '#0f172a' : '#94a3b8';
+      let state = 'upcoming';
+      if (currentIndex >= 0) {
+        if (idx < currentIndex) state = 'done';
+        else if (idx === currentIndex) state = 'current';
+      }
+
+      const palette = {
+        done: { color: '#22c55e', muted: '#0f172a', badgeBg: '#dcfce7', badgeText: '#166534', badgeLabel: 'Selesai' },
+        current: { color: '#f97316', muted: '#0f172a', badgeBg: '#ffedd5', badgeText: '#c2410c', badgeLabel: 'Berjalan' },
+        upcoming: { color: '#94a3b8', muted: '#94a3b8', badgeBg: '#e2e8f0', badgeText: '#475569', badgeLabel: 'Menunggu' }
+      };
+
+      const theme = palette[state];
       return {
         status,
         label: statusLabel(status),
         date: entry.created_at || '',
         note: entry.note || '',
         state,
-        color,
-        muted
+        color: theme.color,
+        muted: theme.muted,
+        badgeBg: theme.badgeBg,
+        badgeText: theme.badgeText,
+        badgeLabel: theme.badgeLabel
       };
     });
   })();
@@ -162,12 +175,13 @@
             {#each timelineEntries as entry}
               <div
                 class={`timeline-card ${entry.state}`}
-                style={`--tl-color:${entry.color}; --tl-muted:${entry.muted};`}
+                style={`--tl-color:${entry.color}; --tl-muted:${entry.muted}; --tl-badge-bg:${entry.badgeBg}; --tl-badge-text:${entry.badgeText};`}
               >
                 <div class="timeline-marker"></div>
                 <div class="timeline-content">
                   <strong>{entry.label}</strong>
                   <span>{entry.date ? toDate(entry.date) : 'Belum tercatat'}</span>
+                  <span class="timeline-badge">{entry.badgeLabel}</span>
                   <small>{entry.note || 'Perubahan status tercatat di backend.'}</small>
                 </div>
               </div>
@@ -234,13 +248,13 @@
     border-radius: 50%;
     border: 2px solid var(--tl-color, #e5e7eb);
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--tl-color, #16a34a) 12%, transparent);
   }
 
   .timeline-card.done .timeline-marker {
     background: var(--tl-color, #16a34a);
     border-color: var(--tl-color, #16a34a);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--tl-color, #16a34a) 20%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--tl-color, #16a34a) 20%, transparent);
   }
 
   .timeline-card.done::before {
@@ -256,6 +270,18 @@
     display: block;
     color: var(--tl-muted, #1f2937);
     font-size: 0.95rem;
+  }
+
+  .timeline-badge {
+    display: inline-block;
+    margin: 0.35rem 0;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: var(--tl-badge-bg, #e2e8f0);
+    color: var(--tl-badge-text, #475569);
+    font-size: 0.78rem;
+    font-weight: 600;
+    width: fit-content;
   }
 
   .timeline-content small {
