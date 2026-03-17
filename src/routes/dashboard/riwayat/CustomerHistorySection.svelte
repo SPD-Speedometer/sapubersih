@@ -122,10 +122,14 @@
 
   {#if !isMobileView || showHistoryDetail}
     <article class={`panel ${isMobileView ? 'panel-mobile-detail' : ''}`}>
-    <h3>Detail order</h3>
-    {#if isMobileView && showHistoryDetail}
-      <button class="btn btn-ghost back-btn" type="button" on:click={onBackDetail}>← Kembali</button>
-    {/if}
+    <div class="detail-head">
+      <h3>Detail order</h3>
+      {#if isMobileView && showHistoryDetail}
+        <button class="icon-btn" type="button" on:click={onBackDetail} aria-label="Kembali">
+          ←
+        </button>
+      {/if}
+    </div>
     {#if !selectedOrder}
       <p class="muted">Pilih salah satu order untuk melihat detail dan timeline.</p>
     {:else}
@@ -295,9 +299,23 @@
     width: 100%;
   }
 
-  .back-btn {
-    margin: 0.4rem 0 0.8rem;
-    padding-left: 0;
-    color: var(--color-brand-800, #0f172a);
+  .detail-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #0f172a;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    line-height: 1;
   }
 </style>
