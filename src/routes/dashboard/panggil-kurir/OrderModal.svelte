@@ -14,6 +14,7 @@
   export let toCurrency = (value) => value;
   export let unitOptions = () => [];
   export let inline = false;
+  export let hasOngoingOrder = false;
   export let onClose = () => {};
   export let onSubmit = () => {};
   export let onAddAddressFirst = () => {};
@@ -91,9 +92,14 @@
 {#if inline}
   <div class="modal-shell inline-shell">
     <section class="modal-card inline-card" data-testid="order-modal" role="dialog" aria-modal="false">
+      {#if hasOngoingOrder}
+        <div class="inline-warning" role="status">
+          Masih ada order yang belum selesai. Yakin mau panggil kurir lagi?
+        </div>
+      {/if}
+
       <div class="section-head">
         <div>
-          <span class="badge">Tambah order</span>
           <h3>Form panggil kurir</h3>
         </div>
       </div>
@@ -185,9 +191,14 @@
   <div class="modal-backdrop" role="presentation" on:click|self={onClose}>
     <div class="modal-shell">
       <section class="modal-card" data-testid="order-modal" role="dialog" aria-modal="true">
+        {#if hasOngoingOrder}
+          <div class="inline-warning" role="status">
+            Masih ada order yang belum selesai. Yakin mau panggil kurir lagi?
+          </div>
+        {/if}
+
         <div class="section-head">
           <div>
-            <span class="badge">Tambah order</span>
             <h3>Form panggil kurir</h3>
           </div>
         </div>
@@ -306,6 +317,29 @@
     .inline-card {
       padding: 0.9rem 1rem;
     }
+
+    /* Hilangkan margin/padding luar di tampilan mobile agar menempel ke tepi */
+    .inline-shell {
+      padding: 0;
+    }
+
+    .inline-card {
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  .inline-warning {
+    margin: 0.5rem 0 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    background: #fff6ed;
+    border: 1px solid #fed7aa;
+    color: #c05621;
+    font-weight: 600;
   }
 
   :global(.flatpickr-input) {

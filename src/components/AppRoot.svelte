@@ -103,6 +103,7 @@
   let selectedOrder = null;
   let orderHistoryWarning = '';
   let authInlineAlert = '';
+  let hasOngoingOrder = false;
 
   let orderModalOpen = false;
   let editingAddressId = null;
@@ -193,6 +194,7 @@
 
   $: displayName = profile?.name || $session.user?.name || 'Sahabat Bersih';
   $: lastOrderDate = orders[0]?.created_at ? toDate(orders[0].created_at) : null;
+  $: hasOngoingOrder = orders.some((order) => !['completed', 'cancelled', 'failed'].includes(order.status));
 
   onMount(() => {
     const handlePopState = async () => {
@@ -783,6 +785,7 @@
             {activePricingRule}
             {currentWasteCategory}
             {estimatedLineTotal}
+            {hasOngoingOrder}
             {toCurrency}
             {unitOptions}
             onClose={() => goCustomer('home')}
