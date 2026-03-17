@@ -34,6 +34,43 @@
 
   const courierVisibleStatuses = ['assigned', 'enroute', 'arrived', 'picked_up', 'delivered', 'completed'];
   $: showCourierInfo = selectedOrder && courierVisibleStatuses.includes(selectedOrder.status);
+
+  const statusOrder = [
+    'draft',
+    'submitted',
+    'waiting_admin_price',
+    'waiting_payment',
+    'paid',
+    'assigned',
+    'enroute',
+    'arrived',
+    'picked_up',
+    'delivered',
+    'completed'
+  ];
+
+  $: timelineEntries = (() => {
+    if (!selectedOrder) return [];
+    const timelineMap = (orderTimeline || []).reduce((acc, entry) => {
+      acc[String(entry.status)] = entry;
+      return acc;
+    }, {});
+
+    const currentStatus = selectedOrder.status || orderTimeline?.[orderTimeline.length - 1]?.status || '';
+    const currentIndex = statusOrder.indexOf(currentStatus);
+
+    return statusOrder.map((status, idx) => {
+      const entry = timelineMap[status] || {};
+      const state = currentIndex >= 0 && idx <= currentIndex ? 'done' : 'pending';
+      return {
+        status,
+        label: statusLabel(status),
+        date: entry.created_at || '',
+        note: entry.note || '',
+        state
+      };
+    });
+  })();
 </script>
 
 <section class="section-grid history-layout">
@@ -118,11 +155,14 @@
         <div>
           <h4>Timeline</h4>
           <div class="timeline-list">
-            {#each orderTimeline as entry}
-              <div class="timeline-card">
-                <strong>{statusLabel(entry.status)}</strong>
-                <span>{toDate(entry.created_at)}</span>
-                <small>{entry.note || 'Perubahan status tercatat di backend.'}</small>
+            {#each timelineEntries as entry}
+              <div class={`timeline-card ${entry.state}`}>
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                  <strong>{entry.label}</strong>
+                  <span>{entry.date ? toDate(entry.date) : 'Belum tercatat'}</span>
+                  <small>{entry.note || 'Perubahan status tercatat di backend.'}</small>
+                </div>
               </div>
             {/each}
           </div>
@@ -149,5 +189,81 @@
   .courier-card span {
     color: var(--muted, #6b7280);
     font-size: 0.95rem;
+  }
+
+  .timeline-list {
+    position: relative;
+    display: grid;
+    gap: 0.65rem;
+    padding-left: 0.8rem;
+  }
+
+  .timeline-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .timeline-card::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 18px;
+    bottom: -0.65rem;
+    width: 2px;
+    background: #e5e7eb;
+  }
+
+  .timeline-card:last-child::before {
+    display: none;
+  }
+
+  .timeline-marker {
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    border-radius: 50%;
+    border: 2px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0);
+  }
+
+  .timeline-card.done .timeline-marker {
+    background: #16a34a;
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+  }
+
+  .timeline-card.done::before {
+    background: linear-gradient(#16a34a, #16a34a);
+  }
+
+  .timeline-content strong {
+    display: block;
+    color: #0f172a;
+  }
+
+  .timeline-content span {
+    display: block;
+    color: #1f2937;
+    font-size: 0.95rem;
+  }
+
+  .timeline-content small {
+    display: block;
+    color: #6b7280;
+  }
+
+  .timeline-card.pending .timeline-marker {
+    background: #fff;
+    border-color: #cbd5e1;
+  }
+
+  .timeline-card.pending .timeline-content strong,
+  .timeline-card.pending .timeline-content span,
+  .timeline-card.pending .timeline-content small {
+    color: #94a3b8;
   }
 </style>
