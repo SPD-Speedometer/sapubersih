@@ -2,6 +2,8 @@ node_modules
 dist
 .vite
 .svelte-kit
+.wrangler
+.wrangler-state
 .env
 __pycache__
 *.pyc
