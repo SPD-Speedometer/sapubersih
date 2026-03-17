@@ -123,12 +123,12 @@
   {#if !isMobileView || showHistoryDetail}
     <article class={`panel ${isMobileView ? 'panel-mobile-detail' : ''}`}>
     <div class="detail-head">
-      <h3>Detail order</h3>
       {#if isMobileView && showHistoryDetail}
         <button class="icon-btn" type="button" on:click={onBackDetail} aria-label="Kembali">
           ←
         </button>
       {/if}
+      <h3>Detail order</h3>
     </div>
     {#if !selectedOrder}
       <p class="muted">Pilih salah satu order untuk melihat detail dan timeline.</p>
