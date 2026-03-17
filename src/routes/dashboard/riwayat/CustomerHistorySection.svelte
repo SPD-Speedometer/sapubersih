@@ -62,12 +62,16 @@
     return statusOrder.map((status, idx) => {
       const entry = timelineMap[status] || {};
       const state = currentIndex >= 0 && idx <= currentIndex ? 'done' : 'pending';
+      const color = state === 'done' ? '#16a34a' : '#cbd5e1';
+      const muted = state === 'done' ? '#0f172a' : '#94a3b8';
       return {
         status,
         label: statusLabel(status),
         date: entry.created_at || '',
         note: entry.note || '',
-        state
+        state,
+        color,
+        muted
       };
     });
   })();
@@ -156,7 +160,10 @@
           <h4>Timeline</h4>
           <div class="timeline-list">
             {#each timelineEntries as entry}
-              <div class={`timeline-card ${entry.state}`}>
+              <div
+                class={`timeline-card ${entry.state}`}
+                style={`--tl-color:${entry.color}; --tl-muted:${entry.muted};`}
+              >
                 <div class="timeline-marker"></div>
                 <div class="timeline-content">
                   <strong>{entry.label}</strong>
@@ -225,45 +232,45 @@
     height: 14px;
     margin-top: 2px;
     border-radius: 50%;
-    border: 2px solid #e5e7eb;
+    border: 2px solid var(--tl-color, #e5e7eb);
     background: #fff;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0);
   }
 
   .timeline-card.done .timeline-marker {
-    background: #16a34a;
-    border-color: #16a34a;
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+    background: var(--tl-color, #16a34a);
+    border-color: var(--tl-color, #16a34a);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--tl-color, #16a34a) 20%, transparent);
   }
 
   .timeline-card.done::before {
-    background: linear-gradient(#16a34a, #16a34a);
+    background: linear-gradient(var(--tl-color, #16a34a), var(--tl-color, #16a34a));
   }
 
   .timeline-content strong {
     display: block;
-    color: #0f172a;
+    color: var(--tl-muted, #0f172a);
   }
 
   .timeline-content span {
     display: block;
-    color: #1f2937;
+    color: var(--tl-muted, #1f2937);
     font-size: 0.95rem;
   }
 
   .timeline-content small {
     display: block;
-    color: #6b7280;
+    color: color-mix(in srgb, var(--tl-muted, #6b7280) 80%, #ffffff);
   }
 
   .timeline-card.pending .timeline-marker {
     background: #fff;
-    border-color: #cbd5e1;
+    border-color: var(--tl-color, #cbd5e1);
   }
 
   .timeline-card.pending .timeline-content strong,
   .timeline-card.pending .timeline-content span,
   .timeline-card.pending .timeline-content small {
-    color: #94a3b8;
+    color: var(--tl-muted, #94a3b8);
   }
 </style>
