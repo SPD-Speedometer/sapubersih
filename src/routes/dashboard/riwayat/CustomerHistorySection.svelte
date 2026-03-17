@@ -8,6 +8,32 @@
   export let toDate = (value) => value;
   export let onRefresh = () => {};
   export let onOpenOrder = () => {};
+
+  $: courierInfo = selectedOrder
+    ? {
+        name:
+          selectedOrder.courier?.name ||
+          selectedOrder.courier_name ||
+          selectedOrder.courier_user?.name ||
+          selectedOrder.assigned_user?.name ||
+          '-',
+        phone:
+          selectedOrder.courier?.phone ||
+          selectedOrder.courier_phone ||
+          selectedOrder.courier_user?.phone ||
+          selectedOrder.assigned_user?.phone ||
+          '',
+        vehicle:
+          selectedOrder.courier?.vehicle ||
+          selectedOrder.courier_vehicle ||
+          selectedOrder.courier_user?.vehicle ||
+          selectedOrder.assigned_user?.vehicle ||
+          ''
+      }
+    : null;
+
+  const courierVisibleStatuses = ['assigned', 'enroute', 'arrived', 'picked_up', 'delivered', 'completed'];
+  $: showCourierInfo = selectedOrder && courierVisibleStatuses.includes(selectedOrder.status);
 </script>
 
 <section class="section-grid history-layout">
@@ -78,6 +104,17 @@
           </div>
         </div>
 
+        {#if showCourierInfo}
+          <div>
+            <h4>Kurir ditugaskan</h4>
+            <div class="courier-card">
+              <strong>{courierInfo?.name}</strong>
+              {#if courierInfo?.phone}<span>Telp: {courierInfo.phone}</span>{/if}
+              {#if courierInfo?.vehicle}<span>Kendaraan: {courierInfo.vehicle}</span>{/if}
+            </div>
+          </div>
+        {/if}
+
         <div>
           <h4>Timeline</h4>
           <div class="timeline-list">
@@ -94,3 +131,23 @@
     {/if}
   </article>
 </section>
+
+<style>
+  .courier-card {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--line, #e5e7eb);
+    background: #f8fafc;
+  }
+
+  .courier-card strong {
+    font-size: 1.02rem;
+  }
+
+  .courier-card span {
+    color: var(--muted, #6b7280);
+    font-size: 0.95rem;
+  }
+</style>
