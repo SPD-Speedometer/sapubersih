@@ -1,0 +1,11 @@
+name = "sapu-bersih"
+main = "./.svelte-kit/cloudflare/_worker.js"
+compatibility_date = "2026-03-17"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# API_BASE="https://api.example.com"
+
+[site]
+# Optional: serve static assets if needed
+bucket = "./static"
