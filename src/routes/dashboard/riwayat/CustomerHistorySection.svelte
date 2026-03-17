@@ -95,7 +95,13 @@
     <article class="panel">
     <div class="section-head">
       <h3>Riwayat order</h3>
-      <button class="btn btn-ghost" on:click={onRefresh}>Refresh</button>
+      {#if isMobileView}
+        <button class="icon-btn ghost" type="button" on:click={onRefresh} aria-label="Refresh">
+          ↻
+        </button>
+      {:else}
+        <button class="btn btn-ghost" on:click={onRefresh}>Refresh</button>
+      {/if}
     </div>
 
     {#if orderHistoryWarning}
@@ -320,5 +326,11 @@
     place-items: center;
     font-size: 1rem;
     line-height: 1;
+  }
+
+  .icon-btn.ghost {
+    border: 1px solid transparent;
+    background: transparent;
+    color: #0f172a;
   }
 </style>
