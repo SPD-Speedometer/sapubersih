@@ -11,6 +11,17 @@
   export let onRefresh = () => {};
   export let onOpenOrder = () => {};
   export let onBackDetail = () => {};
+  let refreshing = false;
+
+  async function handleRefresh() {
+    if (refreshing) return;
+    refreshing = true;
+    try {
+      await onRefresh();
+    } finally {
+      refreshing = false;
+    }
+  }
 
   $: courierInfo = selectedOrder
     ? {
@@ -97,14 +108,26 @@
       <h3>Riwayat order</h3>
       <div class="section-actions">
         {#if isMobileView}
-          <button class="icon-btn ghost" type="button" on:click={onRefresh} aria-label="Refresh">
+          <button class="icon-btn ghost" type="button" on:click={handleRefresh} aria-label="Refresh" disabled={refreshing}>
             ↻
           </button>
         {:else}
-          <button class="btn btn-ghost" on:click={onRefresh}>Refresh</button>
+          <button class="btn btn-ghost" on:click={handleRefresh} disabled={refreshing}>
+            {#if refreshing}Memuat...{/if}
+            {#if !refreshing}Refresh{/if}
+          </button>
         {/if}
       </div>
     </div>
+
+    {#if refreshing}
+      <div class="refresh-indicator">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <small>Memuat data riwayat...</small>
+      </div>
+    {/if}
 
     {#if orderHistoryWarning}
       <p class="muted" data-testid="order-history-warning">{orderHistoryWarning}</p>
@@ -363,5 +386,36 @@
       flex-direction: row;
       align-items: center;
     }
+  }
+
+  .refresh-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0.4rem 0 0.6rem;
+    color: #4b5563;
+    font-size: 0.9rem;
+  }
+
+  .refresh-indicator .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #16a34a;
+    animation: pulse 1s infinite ease-in-out;
+  }
+
+  .refresh-indicator .dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .refresh-indicator .dot:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 0.2; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-2px); }
+    100% { opacity: 0.2; transform: translateY(0); }
   }
 </style>
