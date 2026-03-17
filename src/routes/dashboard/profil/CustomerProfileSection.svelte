@@ -50,7 +50,7 @@
 
   <div class="profile-actions">
     <div class="profile-actions-left">
-      <button class="btn" type="button" disabled={busy} on:click={onSubmit}>Simpan perubahan</button>
+      <button class="btn" type="button" disabled={busy} on:click={onSubmit}>Simpan</button>
     </div>
     <div class="profile-actions-right">
       <button class="profile-logout" type="button" on:click={onLogout} disabled={busy}>
