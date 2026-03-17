@@ -364,5 +364,4 @@
       align-items: center;
     }
   }
-  }
 </style>
