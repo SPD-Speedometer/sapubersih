@@ -93,15 +93,17 @@
 <section class="section-grid history-layout">
   {#if !(isMobileView && showHistoryDetail)}
     <article class="panel">
-    <div class="section-head">
+    <div class="section-head section-head-inline">
       <h3>Riwayat order</h3>
-      {#if isMobileView}
-        <button class="icon-btn ghost" type="button" on:click={onRefresh} aria-label="Refresh">
-          ↻
-        </button>
-      {:else}
-        <button class="btn btn-ghost" on:click={onRefresh}>Refresh</button>
-      {/if}
+      <div class="section-actions">
+        {#if isMobileView}
+          <button class="icon-btn ghost" type="button" on:click={onRefresh} aria-label="Refresh">
+            ↻
+          </button>
+        {:else}
+          <button class="btn btn-ghost" on:click={onRefresh}>Refresh</button>
+        {/if}
+      </div>
     </div>
 
     {#if orderHistoryWarning}
@@ -332,5 +334,21 @@
     border: 1px solid transparent;
     background: transparent;
     color: #0f172a;
+  }
+
+  .section-head-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-head-inline .section-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 </style>
