@@ -180,7 +180,7 @@
             </small>
           </div>
 
-          <div class="stack-actions mt-gap">
+          <div class="stack-actions mt-gap mb-gap">
             <button class="btn" data-testid="order-submit" disabled={busy}>Submit Order</button>
           </div>
         </form>
@@ -350,5 +350,9 @@
 
   .mt-gap {
     margin-top: 0.75rem;
+  }
+
+  .mb-gap {
+    margin-bottom: 1rem;
   }
 </style>
