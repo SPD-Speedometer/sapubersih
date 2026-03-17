@@ -194,7 +194,10 @@
 
   $: displayName = profile?.name || $session.user?.name || 'Sahabat Bersih';
   $: lastOrderDate = orders[0]?.created_at ? toDate(orders[0].created_at) : null;
-  $: hasOngoingOrder = orders.some((order) => !['completed', 'cancelled', 'failed'].includes(order.status));
+  // Warning appears only if there is an order that belum sampai tahap dijemput/delivered/selesai.
+  $: hasOngoingOrder = orders.some((order) =>
+    !['picked_up', 'delivered', 'completed', 'cancelled', 'failed'].includes(order.status)
+  );
 
   onMount(() => {
     const handlePopState = async () => {
