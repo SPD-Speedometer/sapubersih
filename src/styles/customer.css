@@ -198,6 +198,7 @@
   align-items: center;
   padding: 0.4rem 0.35rem;
   z-index: 40;
+  overflow: visible;
 }
 
 .bottom-nav button {
@@ -218,6 +219,20 @@
   color: var(--brand-strong);
   background: rgba(36, 157, 90, 0.12);
   border-radius: 14px;
+}
+
+.bottom-nav .bottom-call-btn {
+  background: linear-gradient(135deg, #7bd13c, #249d5a);
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 0.55rem 0.8rem;
+  box-shadow: 0 12px 24px rgba(36, 157, 90, 0.24);
+  transform: translateY(-12px);
+}
+
+.bottom-nav .bottom-call-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #63c229, #1f8d4f);
 }
 
 .profile-panel {

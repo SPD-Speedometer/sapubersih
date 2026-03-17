@@ -10,6 +10,7 @@
     "test:register-order": "node scripts/test-register-to-order.mjs"
   },
   "dependencies": {
+    "flatpickr": "^4.6.13",
     "leaflet": "^1.9.4",
     "lucide-svelte": "^0.577.0",
     "svelte": "^4.2.19"

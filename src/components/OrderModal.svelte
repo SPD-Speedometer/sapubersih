@@ -1,4 +1,7 @@
 <script>
+  import flatpickr from 'flatpickr';
+  import 'flatpickr/dist/flatpickr.css';
+
   export let busy = false;
   export let hasAddresses = false;
   export let addresses = [];
@@ -14,6 +17,33 @@
   export let onSubmit = () => {};
   export let onAddAddressFirst = () => {};
   export let onCategoryChange = () => {};
+
+  function datetimePicker(node, value) {
+    const fp = flatpickr(node, {
+      enableTime: true,
+      dateFormat: "Y-m-d\\TH:i",
+      altInput: true,
+      altFormat: 'd M Y, H:i',
+      time_24hr: true,
+      defaultDate: value || null,
+      allowInput: true,
+      onChange(selectedDates, dateStr) {
+        orderForm = { ...orderForm, requested_pickup_at: dateStr };
+      }
+    });
+
+    return {
+      update(newValue) {
+        if (newValue !== value) {
+          value = newValue;
+          fp.setDate(newValue || null, false);
+        }
+      },
+      destroy() {
+        fp.destroy();
+      }
+    };
+  }
 </script>
 
 {#if inline}
@@ -40,7 +70,7 @@
             <select data-testid="order-address-id" bind:value={orderForm.address_id}>
               <option value="">Pilih alamat</option>
               {#each addresses as address}
-                <option value={address.id}>{address.label} - {address.address_text}</option>
+                <option value={String(address.id)}>{address.label} - {address.address_text}</option>
               {/each}
             </select>
           </label>
@@ -59,7 +89,13 @@
 
             <label class="field">
               <span>Jadwal pickup</span>
-              <input data-testid="order-requested-pickup-at" bind:value={orderForm.requested_pickup_at} type="datetime-local" />
+              <input
+                data-testid="order-requested-pickup-at"
+                bind:value={orderForm.requested_pickup_at}
+                use:datetimePicker={orderForm.requested_pickup_at}
+                type="text"
+                placeholder="Pilih tanggal & jam"
+              />
             </label>
           </div>
 
@@ -153,7 +189,7 @@
               <select data-testid="order-address-id" bind:value={orderForm.address_id}>
                 <option value="">Pilih alamat</option>
                 {#each addresses as address}
-                  <option value={address.id}>{address.label} - {address.address_text}</option>
+                  <option value={String(address.id)}>{address.label} - {address.address_text}</option>
                 {/each}
               </select>
             </label>
@@ -172,7 +208,13 @@
 
               <label class="field">
                 <span>Jadwal pickup</span>
-                <input data-testid="order-requested-pickup-at" bind:value={orderForm.requested_pickup_at} type="datetime-local" />
+                <input
+                  data-testid="order-requested-pickup-at"
+                  bind:value={orderForm.requested_pickup_at}
+                  use:datetimePicker={orderForm.requested_pickup_at}
+                  type="text"
+                  placeholder="Pilih tanggal & jam"
+                />
               </label>
             </div>
 
@@ -264,5 +306,16 @@
     border-radius: 16px;
     border: 1px solid #edf0f5;
     padding: 1.25rem 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .modal-card,
+    .inline-card {
+      padding: 0.9rem 1rem;
+    }
+  }
+
+  :global(.flatpickr-input) {
+    width: 100%;
   }
 </style>

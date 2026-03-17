@@ -71,7 +71,9 @@
         ? 'address'
         : initialPath === dashboardRoutes.profile
           ? 'profile'
-          : 'home';
+          : initialPath === dashboardRoutes.pickup
+            ? 'pickup'
+            : 'home';
   let routeReady = false;
   let busy = false;
   let alert = { type: '', text: '' };
@@ -821,13 +823,13 @@
         <LayoutDashboard size={22} strokeWidth={2} />
         <span>Dashboard</span>
       </button>
-      <button class:active={customerSection === 'pickup'} type="button" on:click={openOrderModal}>
-        <Truck size={22} strokeWidth={2} />
-        <span>Panggil</span>
-      </button>
       <button class:active={customerSection === 'history'} type="button" on:click={() => goCustomer('history')}>
         <Clock3 size={22} strokeWidth={2} />
         <span>Riwayat</span>
+      </button>
+      <button class="bottom-call-btn" class:active={customerSection === 'pickup'} type="button" on:click={openOrderModal}>
+        <Truck size={22} strokeWidth={2} />
+        <span>Panggil</span>
       </button>
       <button class:active={customerSection === 'address'} type="button" on:click={() => goCustomer('address')}>
         <MapPin size={22} strokeWidth={2} />
