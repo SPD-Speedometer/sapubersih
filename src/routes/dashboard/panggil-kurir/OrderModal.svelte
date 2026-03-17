@@ -373,7 +373,8 @@
     :global(.flatpickr-input),
     :global(.flatpickr-alt-input) {
       display: block;
-      max-width: calc(100vw - 32px);
+      max-width: calc(90vw - 16px);
+      margin: 0 auto;
     }
   }
 
